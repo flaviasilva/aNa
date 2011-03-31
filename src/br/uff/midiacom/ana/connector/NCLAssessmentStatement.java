@@ -48,7 +48,10 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>assessmentStatement</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define uma assertiva de um conector de um documento NCL.<br/>
+ * Este elemento é o elemento que define uma assertiva de um conector de um documento. Ncl oferece a possibildade de construir condições
+ * que testem o estado de apresentação de um evento, atributos associados a eventos ou valores de propriedades. O elemento <i>assessmentStatement</i>
+ * é utilizado para fazer tais comparações. Este elemento possui dois tipos de elementos filhos: <i>attributeAssessment</i> e <i>valueAssessment</i>.
+ * Possui ainda o atributo <i>comparator</i> que define o operador de comparação.<br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
