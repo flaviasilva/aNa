@@ -47,9 +47,15 @@ import org.xml.sax.XMLReader;
 
 
 /**
- * Esta classe define o elemento <i>compoundStatement</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define uma assertiva composta de um conector de um documento NCL.<br/>
+ * Esta classe define o elemento <i>compoundStatement</i> da
+ * <i>Nested Context Language</i> (NCL), uma assertiva composta.
+ * Este elemento é o que permite definir mais do que uma assertiva num mesmo
+ * conector. Esse elemento possui um atributo operator, que define um operador
+ * lógico que determina a forma como as assertivas são avaliadas: se todas devem
+ * ser avaliadas como verdadeiras para que a condição seja satisfeita (and) ou
+ * apenas uma delas (or).<br/>
  *
+ * @see NCLAssessmentStatement
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
  */
@@ -87,22 +93,29 @@ public class NCLCompoundStatement<S extends NCLStatement> extends NCLElement imp
     }
     
     
-    /**
-     * Determina o operador da assertiva composta.
-     * 
-     * @param operator
-     *          elemento representando o operador a ser atribuido.
-     */
+   /**
+    *
+    * Determina o operador lógico da assertiva composta. Se o valor do operador
+    * "and" for passado ao método, todas as sentenças precisam ser verdadeiras
+    * para que a condição do conector seja satisfeita. Caso o valor "or" seja
+    * passado, apenas uma sentença verdadeira é necessária para satisfazer a
+    * condição.
+    *
+    * @param operator
+    *          Objeto do tipo <i>NCLOperator</i> representando o operador a ser
+    * atribuido.
+    */
     public void setOperator(NCLOperator operator) {
         this.operator = operator;
     }
     
     
     /**
-     * Retorna o operador atribuido a assertiva composta.
-     * 
+     * Retorna o operador lógico atribuido a assertiva composta.
+     *
      * @return
-     *          elemento representando o operador atribuido.
+     *         Objeto do tipo <i>NCLOperator</i> representando o operador da
+     * assertiva.
      */
     public NCLOperator getOperator() {
         return operator;
@@ -132,10 +145,11 @@ public class NCLCompoundStatement<S extends NCLStatement> extends NCLElement imp
     
     
     /**
-     * Adiciona uma assertiva a assertiva composta.
-     * 
+     * Adiciona uma assertiva simples (elemento <i>assessmentStatement</i>) a
+     * assertiva composta.
+     *
      * @param statement
-     *          elemento representando a assertiva a ser adicionada.
+     *          Objeto  representando a assertiva a ser adicionada.
      * @return
      *          verdadeiro se a assertiva foi adicionada.
      *
@@ -156,9 +170,10 @@ public class NCLCompoundStatement<S extends NCLStatement> extends NCLElement imp
      * Remove uma assertiva da assertiva composta.
      *
      * @param statement
-     *          elemento representando a assertiva a ser removida.
+     *          Objeto representando a assertiva a ser  removida.
      * @return
      *          verdadeiro se a assertiva foi removida.
+     *    verdadeiro se a assertiva foi removida.
      *
      * @see ArrayList#remove
      */

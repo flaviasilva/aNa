@@ -49,7 +49,10 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>simpleAction</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define uma ação simples de um conector de um documento NCL.<br/>
+ * Este elemento é o elemento que define uma ação simples de um conector de um
+ * documento NCL. Isto é, define uma ação única que será realizada quando a
+ * condição do conector for satisfeita. Através do atributo <i>role</i> o elemento
+ * simpleAction especifica um papel de ação dentre os disponíveis para a linguagem.<br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -100,12 +103,13 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
 
 
     /**
-     * Determina o valor de atribuição da ação.
+     * Determina o valor a ser atribuído a propriedade associada ao papel,
+     * caso o valor do atributo eventType seja "attribution".
      *
      * @param value
      *          String representando o valor de atribuição.
      * @throws java.lang.IllegalArgumentException
-     *          Se o valor a ser atribuído for uma String vazia.
+     *          Dispara uma exceção caso o valor a ser atribuído seja uma String vazia.
      */
     public void setValue(String value) {
         if(value != null && "".equals(value.trim()))
@@ -117,10 +121,12 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
 
 
     /**
-     * Determina o valor de atribuição da ação.
+     * Determina o valor a ser atribuído a propriedade associada ao papel,
+     * caso o valor do atributo eventType seja "attribution".
      *
      * @param value
-     *          Parâmetro representando o valor de atribuição.
+     *          Objeto do tipo connectorParam cujo valor do atributo "name "representa
+     * o valor de atribuição.
      */
     public void setValue(P value) {
         this.parValue = value;
@@ -129,7 +135,8 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
     
         
     /**
-     * Retorna o valor de atribuição da ação.
+     * Retorna o valor atribuído a propriedade associada ao papel, caso o valor
+     * do atributo eventType seja "attribution".
      *
      * @return
      *          String representando o valor de atribuição.
@@ -140,7 +147,8 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
 
 
     /**
-     * Retorna o valor de atribuição da ação.
+     * Retorna o elemento connectorParam cujo valor do atributo "name "representa
+     * o valor de atribuição.
      *
      * @return
      *          Parâmetro representando o valor de atribuição.
@@ -150,8 +158,9 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
     }
     
     
-    /**
-     * Determina o número mínimo de binds que devem usar essa ação.
+   /**
+     * Determina o número mínimo de objetos que devem ser associados a essa ação
+     * (utilizando elementos bind).
      *
      * @param min
      *          inteiro positivo representando o número mínimo.
@@ -163,20 +172,21 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
         this.min = min;
     }
 
-
     /**
-     * Retorna o número mínimo de binds que devem usar essa ação.
+     * Retorna o número mínimo de associações que devem ser feitas ao papel desta ação.
      *
      * @return
      *          inteiro positivo representando o número mínimo.
      */
+    
     public Integer getMin() {
         return min;
     }
 
 
     /**
-     * Determina o número máximo de binds que devem usar essa ação.
+     * Determina o número máximo de objetos que devem ser associados a essa ação
+     * (utilizando elementos bind).
      *
      * @param max
      *          inteiro positivo representando o número máximo ou um inteiro negativo
@@ -191,7 +201,7 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
 
 
     /**
-     * Retorna o número máximo de binds que devem usar essa ação.
+     * Retorna o número máximo de associações que devem ser feitas ao papel desta ação.
      *
      * @return
      *          inteiro positivo representando o número máximo ou -1
@@ -202,8 +212,9 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
     }
 
 
-    /**
-     * Determina como serão disparados o conjunto de binds que usam essa ação.
+     /**
+     * Determina como serão disparados o conjunto de binds que usam essa ação;
+      * se em paralelo (operador "par") ou sequencialmente (operador "seq").
      *
      * @param qualifier
      *          operador que representa como os binds serão disparados.
@@ -214,7 +225,9 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
 
 
     /**
-     * Retorna como serão disparados o conjunto de binds que usam essa ação.
+     * Retorna o operador que determina a maneira como serão executados os binds
+     * que uitilizam esta ação; se em paralelo (operador "par") ou
+     * sequencialmente (operador "seq").
      *
      * @return
      *          operador que representa como os binds serão disparados.
@@ -225,7 +238,7 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
 
 
     /**
-     * Determina o nome do papel de ação seguindo um dos nomes padrões.
+     * Determina o papel de ação, dentre os valores disponibilizados pela linguagem.
      *
      * @param role
      *          elemento representando o nome do papel.
@@ -242,7 +255,7 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
     }
 
 
-    /**
+   /**
      * Retorna o papel utilizado na ação.
      *
      * @return
@@ -254,7 +267,8 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
 
 
     /**
-     * Determina o tipo do evento da ação.
+     * Determina o tipo do evento associado ao papel da ação. Pode assumir os
+     * valores "presentation", "selection" ou "attribution".
      *
      * @param eventType
      *          elemento representando o tipo do evento da ação.
@@ -274,9 +288,8 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
         return eventType;
     }
 
-
     /**
-     * Determina a ação do evento.
+     * Determina o tipo de ação do evento associado ao papel.
      *
      * @param actionType
      *          elemento representando a ação do evento.
@@ -287,10 +300,10 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
 
 
     /**
-     * Retorna o tipo do evento da ação.
+     * Retorna o tipo de ação do evento associado ao papel.
      *
      * @return
-     *          elemento representando o tipo do evento da ação.
+     *          elemento representando o tipo de ação do evento
      */
     public NCLEventAction getActionType() {
         return actionType;
@@ -298,10 +311,11 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
 
 
     /**
-     * Determina o número de repetições da ação.
+     * Determina o número de vezes que a ação deve ser realizada. Esse atributo só é válido em caso de eventos de apresentação e no caso de a
+     * ação ser start.
      *
      * @param repeat
-     *          inteiro representando o número de repetições.
+     *          inteiro representando o número de vezes que a ação será realizada.
      */
     public void setRepeat(Integer repeat) {
         this.repeat = repeat;
@@ -309,8 +323,9 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
     }
 
 
-    /**
-     * Determina o número de repetições da ação.
+     /**
+     * Determina o número de vezes que a ação deve ser realizada. Esse atributo só é válido em caso de eventos de apresentação e no caso de a
+     * ação ser start.
      *
      * @param repeat
      *          Parâmetro representando o número de repetições.
@@ -322,7 +337,7 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
 
 
     /**
-     * Retorna o número de repetições da ação.
+     * Retorna o número de vezes que a ação será realizada.
      *
      * @return
      *          inteiro representando o número de repetições.
@@ -333,10 +348,10 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
 
 
     /**
-     * Retorna o número de repetições da ação.
+     * Retorna o número de vezes que a ação será realizada.
      *
      * @return
-     *          parametro representando o número de repetições.
+     *          Objeto do tipo conectorParam representando o número de repetições.
      */
     public P getParamRepeat() {
         return parRepeat;
@@ -344,7 +359,7 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
 
 
     /**
-     * Determina o delay entre repetições da ação.
+     * Determina o delay (tempo em segundos) a ser estabelecido entre repetições da ação.
      *
      * @param repeatDelay
      *          inteiro representando o delay entre repetições.
@@ -356,7 +371,7 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
 
 
     /**
-     * Determina o delay entre repetições da ação.
+     * Determina o delay (tempo em segundos) a ser estabelecido entre repetições da ação.
      *
      * @param repeatDelay
      *          parâmetro representando o delay entre repetições.
@@ -382,7 +397,7 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
      * Retorna o delay entre repetições da ação.
      *
      * @return
-     *          parâmetro representando o delay entre repetições.
+     *          Retorna um objeto conectorParam representando o delay entre repetições.
      */
     public P getParamRepeatDelay() {
         return parRepeatDelay;
@@ -436,7 +451,10 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
 
 
     /**
-     * Determina o passo da ação de atribuição.
+     * Determina o passo da ação de atribuição, ao longo do tempo definido por
+     * <i>duration</i>. Caso o valor seja a string "indefinite", a atribuição
+     *  é feita linear e continuamente. Esse atributo só tem efeito quando o
+     * atributo <i>duration</i> assume um valor maior que zero.
      *
      * @param by
      *          inteiro positivo representando o passo da atribuição ou negativo
@@ -453,10 +471,13 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
 
 
     /**
-     * Determina o passo da ação de atribuição.
+     *  Determina o passo da ação de atribuição, ao longo do tempo definido por
+     * <i>duration</i>. Caso o valor seja a string "indefinite", a atribuição
+     *  é feita linear e continuamente. Esse atributo só tem efeito quando o
+     * atributo <i>duration</i> assume um valor maior que zero.
      *
      * @param by
-     *          parâmetro representando o passo da atribuição.
+     *          objeto do tipo conectorParam representando o passo da atribuição.
      */
     public void setBy(P by) {
         this.parBy = by;
@@ -464,12 +485,13 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
     }
 
 
-    /**
-     * Retorna o passo da ação de atribuição.
+     /**
+     * Retorna o passo da ação de atribuição, ao longo do tempo definido por <i>duration</i>.
      *
      * @return
      *          inteiro representando o passo da atribuição. Retorna -1 se o
-     *          o passo for "indefinite".
+      * passo for "indefinite".
+     *
      */
     public Integer getBy() {
         return by;
@@ -477,10 +499,10 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
 
 
     /**
-     * Retorna o passo da ação de atribuição.
+     * Retorna o passo da ação de atribuição, ao longo do tempo definido por <i>duration</i>.
      *
      * @return
-     *          parâmetro representando o passo da atribuição.
+     *        Objeto do tipo connectorParam representando o passo da atribuição.
      */
     public P getParamBy() {
         return parBy;
@@ -970,7 +992,14 @@ public class NCLSimpleAction<A extends NCLAction, R extends NCLRole, P extends N
         addWarning("Could not find connectorParam in connector with id: " + id);
         return null;
     }
-
+    
+    /**
+     * Cria um elemento role, representando o papel de uma ação.
+     * @param name
+     *      string representando o nome do papel.
+     * @return
+     *      retorna um elemento role contendo o nome da ação passada como parâmetro.
+     */
 
     protected R createRole(String name) {
         return (R) new NCLRole(name);

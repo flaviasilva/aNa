@@ -50,7 +50,10 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>simpleCondition</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define uma condição simples de um conector de um documento NCL.<br/>
+ * Ele representa uma condição simples de um conector de um documento NCL. Isto é,
+ * o elemento <i>simpleCondition</i> define uma única condição que deve ser
+ * satisfeita (possivelmente, dentre um conjunto de condições) para que um elo
+ * seja ativado.<br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -93,8 +96,9 @@ public class NCLSimpleCondition<C extends NCLCondition, R extends NCLRole, P ext
 
 
     /**
-     * Determina o número mínimo de binds que devem usar essa condição.
-     * 
+     * Determina o número mínimo de objetos que devem ser associados a essa
+     * condição (utilizando elementos bind).
+     *
      * @param min
      *          inteiro positivo representando o número mínimo.
      */
@@ -107,18 +111,19 @@ public class NCLSimpleCondition<C extends NCLCondition, R extends NCLRole, P ext
 
 
     /**
-     * Retorna o número mínimo de binds que devem usar essa condição.
+     * Retorna o número mínimo de associações que devem ser feitas ao papel
+     * desta condição.
      *
      * @return
      *          inteiro positivo representando o número mínimo.
-     */    
+     */
     public Integer getMin() {
         return min;
     }
     
 
     /**
-     * Determina o número máximo de binds que devem usar essa condição.
+     * Determina o número máximo de objetos que devem ser associados a essa condição (utilizando elementos bind).
      *
      * @param max
      *          inteiro positivo representando o número máximo ou um inteiro negativo
@@ -133,7 +138,7 @@ public class NCLSimpleCondition<C extends NCLCondition, R extends NCLRole, P ext
 
 
     /**
-     * Retorna o número máximo de binds que devem usar essa condição.
+     * Retorna o número máximo de associações que devem ser feitas ao papel desta condição.
      *
      * @return
      *          inteiro positivo representando o número máximo ou -1
@@ -145,7 +150,10 @@ public class NCLSimpleCondition<C extends NCLCondition, R extends NCLRole, P ext
 
 
     /**
-     * Determina como serão avaliados o conjunto de binds que usam essa condição.
+     * Determina como serão avaliados o conjunto de binds que usam essa condição;
+     * se todas as interfaces que utilizam esta condição devem satisfaze-la para
+     * a ativação do elo (valor "and") ou se basta que apenas uma delas seja
+     * satisfeita para que o elo seja ativado (valor "or").
      *
      * @param qualifier
      *          operador lógico que representa como os binds serão avaliados.
@@ -156,7 +164,10 @@ public class NCLSimpleCondition<C extends NCLCondition, R extends NCLRole, P ext
 
 
     /**
-     * Retorna como serão avaliados o conjunto de binds que usam essa condição.
+     * Retorna o operador lógico que determina a forma de avaliaçao dos binds
+     * que utilizam essa condição. Caso o valor do atributo seja igual a "and",
+     * todas as interfaces que utilizam essa condição devem satisfaze-la.
+     * Caso o valor seja "or", basta que uma das interfaces satisfaçam a condição.
      *
      * @return
      *          operador lógico que representa como os binds serão avaliados.
@@ -167,7 +178,8 @@ public class NCLSimpleCondition<C extends NCLCondition, R extends NCLRole, P ext
 
 
     /**
-     * Determina o nome do papel de condição seguindo um dos nomes padrões.
+     * Determina o papel de condição, dentre as condições possíveis definidas
+     * pela linguagem.
      *
      * @param role
      *          elemento representando o nome do papel.
@@ -188,7 +200,7 @@ public class NCLSimpleCondition<C extends NCLCondition, R extends NCLRole, P ext
      * Retorna o papel utilizado na condição.
      *
      * @return
-     *          elemento representando o papel.
+     *          retorna um objeto do tipo role representando o papel da condição.
      */
     public R getRole() {
         return role;
@@ -196,22 +208,25 @@ public class NCLSimpleCondition<C extends NCLCondition, R extends NCLRole, P ext
 
 
     /**
-     * Determina a tecla da condição.
+     * Determina a tecla do controle remoto associada a condição. Para condições
+     * com cujo elemento <i>eventType</i> possui o valor "selection". Assume
+     * valores predefinidos da linguagem.
      *
      * @param key
-     *          elemento representando a tecla da condição.
+     *         objeto representando a tecla associada a condição.
      */
     public void setKey(NCLKey key) {
         this.key = key;
         this.parKey = null;
     }
 
-
     /**
-     * Determina a tecla da condição.
+     * Determina a tecla do controle remoto associada a condição. Para condições
+     * com cujo elemento <i>eventType</i> possui o valor "selection". Assume
+     * valores predefinidos da linguagem.
      *
      * @param key
-     *          parâmetro representando a tecla da condição.
+     *          objeto representando o parâmetro que define  a tecla da condição.
      */
     public void setKey(P key) {
         this.parKey = key;
@@ -220,7 +235,8 @@ public class NCLSimpleCondition<C extends NCLCondition, R extends NCLRole, P ext
 
 
     /**
-     * Retorna a tecla da condição.
+     * Retorna a tecla do controle remoto que, caso utilizada para selecionar
+     * um objeto, satisfaz a condição.
      *
      * @return
      *          elemento representando a tecla da condição.
@@ -231,10 +247,11 @@ public class NCLSimpleCondition<C extends NCLCondition, R extends NCLRole, P ext
 
 
     /**
-     * Retorna a tecla da condição.
+     * Retorna a tecla do controle remoto que, caso utilizada para selecionar
+     * um objeto, satisfaz a condição.
      *
      * @return
-     *          parâmetro representando a tecla da condição.
+     *         elemento representando o parâmetro que define a tecla da condição.
      */
     public P getParamKey() {
         return parKey;
@@ -242,7 +259,10 @@ public class NCLSimpleCondition<C extends NCLCondition, R extends NCLRole, P ext
 
 
     /**
-     * Determina o tipo do evento da condição.
+     * Determina o tipo do evento da condição. Pode assumir o valor "presentation"
+     * para eventos de apresentação, "selection" para seleção ou "attribution"
+     * para eventos de atribuição de valor.
+     *
      *
      * @param eventType
      *          elemento representando o tipo do evento da condição.
@@ -253,7 +273,8 @@ public class NCLSimpleCondition<C extends NCLCondition, R extends NCLRole, P ext
 
 
     /**
-     * Retorna o tipo do evento da condição.
+     * Retorna o tipo do evento da condição. Pode assumir o valor "presentation" para eventos de apresentação, "selection"
+     * para seleção ou "attribution" para eventos de atribuição de valor.
      *
      * @return
      *          elemento representando o tipo do evento da condição.
@@ -264,7 +285,10 @@ public class NCLSimpleCondition<C extends NCLCondition, R extends NCLRole, P ext
 
 
     /**
-     * Determina a transição do evento da condição.
+     * Determina a transição na máquina de estados do evento da condição.
+     * Pode assumir os valores "starts", "stops", "aborts", "pauses" ou "resumes",
+     * conforme a máquina de eventos de um objeto. Em geral, o atributo <i>role</i>
+     * define automaticamente o valor do atributo <i>transition</i>.
      *
      * @param transition
      *          elemento representando a transição do evento da condição.
@@ -275,7 +299,8 @@ public class NCLSimpleCondition<C extends NCLCondition, R extends NCLRole, P ext
 
 
     /**
-     * Retorna a transição do evento da condição.
+     * Retorna a transição do evento da condição.Pode assumir os valores
+     * "starts", "stops", "aborts", "pauses" ou "resumes".
      *
      * @return
      *          elemento representando a transição do evento da condição.
@@ -611,7 +636,13 @@ public class NCLSimpleCondition<C extends NCLCondition, R extends NCLRole, P ext
         return null;
     }
 
-
+    /**
+     * Cria um elemento role, representando um papel de condição.
+     * @param name
+     *      string representando o nome do papel
+     * @return
+     *      objeto do tipo role, representando o papel de condição.
+     */
     protected R createRole(String name) {
         return (R) new NCLRole(name);
     }

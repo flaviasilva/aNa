@@ -46,11 +46,13 @@ import java.util.List;
 import org.xml.sax.Attributes;
 import org.xml.sax.XMLReader;
 
-
 /**
  * Esta classe define o elemento <i>compoundAction</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define uma ação composta de um conector de um documento NCL.<br/>
- *
+ * Este elemento permite definir mais do que uma ação num mesmo conector,
+ * ou seja, uma ação composta. Esse elemento possui um atributo operator, que
+ * define a ordem em que as ações que ele contém são disparadas: em paralelo (par)
+ * ou sequencialmente (seq).<br/>
+ * @see NCLSimpleAction
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
  */

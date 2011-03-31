@@ -43,7 +43,10 @@ import br.uff.midiacom.ana.NCLValues.NCLDefaultConditionRole;
 
 
 /**
- * Esta classe define um papel de conector da <i>Nested Context Language</i> (NCL).<br/>
+ * Esta classe define um papel de conector da <i>Nested Context Language</i> (NCL).
+ * O papel do concetor é o seu ponto de interface entre os objetos que
+ * participarão do relacionamento. Ele define a que comportamento cada mídia
+ * está associada, quer seja numa condição ou numa ação.<br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -58,12 +61,12 @@ public class NCLRole {
     
     
     /**
-     * Construtor do papel.
-     * 
+     * Construtor do papel. Especifica um nome para o papel.
+     *
      * @param name
-     *          String com o nome do papel.
+     *          String representando o nome do papel.
      * @throws java.lang.IllegalArgumentException
-     *          Se o nome a ser atribuído for uma String vazia.
+     *          Dispara uma exceção caso a String atribuida ao nome seja uma String vazia.
      */
     public NCLRole(String name) throws IllegalArgumentException {
         setName(name);
@@ -71,10 +74,10 @@ public class NCLRole {
 
 
     /**
-     * Construtor do papel.
+     * Construtor do elemento <i>role</i>. Especifica um nome para o papel dentre os papéis padrões de condição.
      *
      * @param name
-     *          elemento representando o nome do papel.
+     *          Objeto representando um papel padrão de condição.
      */
     public NCLRole(NCLDefaultConditionRole name) {
         setName(name);
@@ -82,10 +85,10 @@ public class NCLRole {
 
 
     /**
-     * Construtor do papel.
+     * Construtor do elemento <i>role</i>. Especifica um nome para o papel dentre os papéis padrões de ação.
      *
      * @param name
-     *          elemento representando o nome do papel.
+     *          Objeto representando um papel padrão de ação.
      */
     public NCLRole(NCLDefaultActionRole name) {
         setName(name);
@@ -93,12 +96,12 @@ public class NCLRole {
 
 
     /**
-     * Determina o nome do papel
+     * Determina o nome do papel.
      *
      * @param name
-     *          String com o nome do papel.
+     *          String representando o nome do papel.
      * @throws java.lang.IllegalArgumentException
-     *          Se o nome a ser atribuído for uma String vazia.
+     *          Dispara uma exceção caso o nome a ser atribuído seja uma String vazia.
      */
     public void setName(String name) throws IllegalArgumentException {
         if(name != null && "".equals(name.trim()))
@@ -127,10 +130,10 @@ public class NCLRole {
 
 
     /**
-     * Determina o nome do papel seguindo um dos nomes de condição padrões.
+     * Determina um  nome para papel a partir dos papéis padrões de condição.
      *
      * @param name
-     *          elemento representando o nome do papel.
+     *          Objeto representando um papel padrão de condição.
      */
     public void setName(NCLDefaultConditionRole name) {
         this.cname = name;
@@ -140,10 +143,10 @@ public class NCLRole {
 
 
     /**
-     * Determina o nome do papel seguindo um dos nomes de ação padrões.
+     * Determina um nome para o papel a partir dos papéis padrões de ação.
      *
      * @param name
-     *          elemento representando o nome do papel.
+     *          Objeto representando um papel padrão de ação.
      */
     public void setName(NCLDefaultActionRole name) {
         aname = name;
@@ -153,8 +156,8 @@ public class NCLRole {
     
     
     /**
-     * Retorna o nome do papel. Retorna a String que representa um papel padrao
-     * caso o nome do papel tenha sido determinado desta forma.
+     * Retorna o nome do papel. Retorna a String que representa um papel
+     * caso o nome do papel tenha sido determinado como string.
      *
      * @return
      *          String com o nome do papel.

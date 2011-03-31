@@ -47,12 +47,17 @@ import org.xml.sax.XMLReader;
 
 
 /**
- * Esta classe define o elemento <i>assessmentStatement</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define uma assertiva de um conector de um documento. Ncl oferece a possibildade de construir condições
- * que testem o estado de apresentação de um evento, atributos associados a eventos ou valores de propriedades. O elemento <i>assessmentStatement</i>
- * é utilizado para fazer tais comparações. Este elemento possui dois tipos de elementos filhos: <i>attributeAssessment</i> e <i>valueAssessment</i>.
+ * Esta classe define o elemento <i>assessmentStatement</i> da <i>Nested Context
+ * Language</i> (NCL).
+ * Este elemento é o elemento que define uma assertiva de um conector de um 
+ * documento. NCL oferece a possibilidade de construir condições que testem o
+ * estado de apresentação de um evento, atributos associados a eventos ou
+ * valores de propriedades. O elemento <i>assessmentStatement</i> é utilizado
+ * para fazer tais comparações. Este elemento possui dois tipos de elementos
+ * filhos: <i>attributeAssessment</i> e <i>valueAssessment</i>.
  * Possui ainda o atributo <i>comparator</i> que define o operador de comparação.<br/>
- *
+ * @see NCLAttributeAssessment
+ * @see NCLValueAssessment
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
  */
@@ -86,12 +91,13 @@ public class NCLAssessmentStatement<S extends NCLStatement, A extends NCLAttribu
         getReader().setContentHandler(this);
     }
 
-
     /**
-     * Determina o comparador da assertiva.
-     * 
+     * Determina o operador de comparação do elemento <i>assessmentStatement</i>.
+     * Assume valores predefinidos pela linguagem.
+     *
+     * @see NCLComparator
      * @param comparator
-     *          comparador utilizado pela assertiva.
+     *          parametro do tipo <i>NCLComparator</i> utilizado pela assertiva.
      */
     public void setComparator(NCLComparator comparator) {
         this.comparator = comparator;
@@ -99,10 +105,11 @@ public class NCLAssessmentStatement<S extends NCLStatement, A extends NCLAttribu
     
     
     /**
-     * Retorna o comparador da assertiva.
-     * 
+     * Retorna o operador de comparação do elemento <i>assessmentStatement</i>.
+     *
+     * @see NCLComparator
      * @return
-     *          comparador utilizado pela assertiva.
+     *          objeto do tipo <i>NCLComparator</i> utilizado pela assertiva.
      */
     public NCLComparator getComparator() {
         return comparator;
@@ -110,12 +117,16 @@ public class NCLAssessmentStatement<S extends NCLStatement, A extends NCLAttribu
     
     
     /**
-     * Determina um valor de comparação a assertiva.
-     * 
+     * Atribui um elemento filho <i>valueAssessment</i> ao elemento
+     * <i>assessmentStatement</i> .
+     *
      * @param value
-     *          String representando o valor de comparação a ser utilizado.
+     *          String representando o valor de comparação a ser utilizado. Esse 
+     * atributo, determinado pelo elo, deve obrigatoriamente asumir um valor de
+     * estado de evento.
+     *
      * @throws java.lang.IllegalArgumentException
-     *          Se o valor for uma String vazia.
+     *          Dispara uma exceção caso o parametro value seja  uma String vazia.
      *
      * @see NCLValueAssessment
      */
@@ -132,19 +143,21 @@ public class NCLAssessmentStatement<S extends NCLStatement, A extends NCLAttribu
     
     
     /**
-     * Retorna o valor de comparação a assertiva.
-     * 
+     * Retorna o elemento <i>valueAssessment</i> da assertiva.
+     *
      * @return
-     *          elemento representando o valor de comparação utilizado.
+     *          Objeto do tipo <i>valueAssessment</i> representando o valor de
+     * comparação utilizado.
      */
     public V getValueAssessment() {
         return valueAssessment;
     }
     
     
-    /**
-     * Adiciona um atributo de comparação a assertiva.
-     * 
+     /**
+     * Adiciona um atributo de comparação a assertiva. Cada <i>assessmentStatement</i> 
+     * pode possuir um número máximo de 2 <i>attributeAssessment</i>.
+     *
      * @param attribute
      *          elemento representando o atributo a ser adicionado.
      * @return
@@ -168,13 +181,14 @@ public class NCLAssessmentStatement<S extends NCLStatement, A extends NCLAttribu
     }
     
     
-    /**
+   /**
      * Remove um atributo de comparação da assertiva.
-     * 
+     *
      * @param attribute
      *          elemento representando o atributo a ser removido.
      * @return
      *          verdadeiro se o atributo for removido.
+     *         verdadeiro se o atributo for removido.
      *
      * @see ArrayList#remove
      */

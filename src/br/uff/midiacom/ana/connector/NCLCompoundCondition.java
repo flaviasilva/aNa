@@ -49,7 +49,13 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>compoundCondition</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define uma condição composta de um conector de um documento NCL.<br/>
+ * Este elemento permite definir mais do que uma condição num mesmo conector, ou
+ * seja, uma condição composta. Esse elemento possui um atributo operator, que
+ * define um operador lógico que determina a forma como as condições simples são
+ * avaliadas: se todas devem ser satisfeitas para que o elo seja ativado (and)
+ * ou apenas uma delas sendo satisfeita é suficiente para a ativação(or).<br/>
+ *
+ * @see NCLSimpleCondition
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -91,21 +97,25 @@ public class NCLCompoundCondition<C extends NCLCondition, S extends NCLStatement
 
 
     /**
-     * Determina o operador da condição composta.
+     * Determina o operador lógico da condição composta. Se o valor do operador
+     * "and" for passado ao método, todas as condições precisam ser satisfeitas
+     * para que a condição composta do conector seja satisfeita. Caso o valor "or"
+     * seja passado, apenas uma condição satisfeita é necessária para satisfazer
+     * a condição composta.
      *
      * @param operator
-     *          elemento representando o operador a ser atribuido.
+     *          Objeto do tipo <i>NCLConditionOperator</i> representando o
+     * operador a ser atribuido.
      */
     public void setOperator(NCLConditionOperator operator) {
         this.operator = operator;
     }
     
-    
     /**
-     * Retorna o operador atribuido a condição composta.
+     * Retorna o operador lógico atribuido a condição composta.
      *
      * @return
-     *          elemento representando o operador atribuido.
+     *          Objeto do tipo <i>NCLConditionOperator</i> representando o operador da condição composta.
      */
     public NCLConditionOperator getOperator() {
         return operator;
@@ -113,13 +123,13 @@ public class NCLCompoundCondition<C extends NCLCondition, S extends NCLStatement
 
 
     /**
-     * Adiciona uma condição a condição composta.
-     * 
-     * @param condition
-     *          elemento representando a condição a ser adicionada
-     * @return
-     *          verdadeiro se a condição foi adicionada.
+     * Adiciona uma condição simples (<i>simpleCondition</i>) a condição composta.
      *
+     * @param condition
+     *          Objeto representando a condição a ser adicionada
+     * @return
+     *          verdadeiro se a condição foi adicionada com sucesso.
+
      * @see ArrayList#add
      */
     public boolean addCondition(C condition) {
@@ -134,12 +144,12 @@ public class NCLCompoundCondition<C extends NCLCondition, S extends NCLStatement
 
 
     /**
-     * Remove uma condição a condição composta.
+     * Remove uma condição simples (<i>simpleCondition</i>) da condição composta.
      *
      * @param condition
-     *          elemento representando a condição a ser removida
+     *          Objeto  representando a condição a ser removida
      * @return
-     *          verdadeiro se a condição foi removida.
+     *          verdadeiro se a condição foi removida com sucesso.
      *
      * @see ArrayList#remove
      */
@@ -159,7 +169,7 @@ public class NCLCompoundCondition<C extends NCLCondition, S extends NCLStatement
      * Verifica se a condição composta possui uma condição.
      * 
      * @param condition
-     *          elemento representando a condição a ser verificada
+     *          objeto representando a condição a ser verificada
      * @return
      *          verdadeiro se a condição existe.
      */
@@ -194,7 +204,7 @@ public class NCLCompoundCondition<C extends NCLCondition, S extends NCLStatement
      * Adiciona uma assertiva a condição composta.
      * 
      * @param statement
-     *          elemento representando a assertiva a ser adicionada.
+     *          objeto representando a assertiva a ser adicionada.
      * @return
      *          verdadeiro se a assertiva foi adicionada.
      *
@@ -215,7 +225,7 @@ public class NCLCompoundCondition<C extends NCLCondition, S extends NCLStatement
      * Remove uma assertiva da condição composta.
      *
      * @param statement
-     *          elemento representando a assertiva a ser removida.
+     *          objeto representando a assertiva a ser removida.
      * @return
      *          verdadeiro se a assertiva foi removida.
      *

@@ -48,8 +48,19 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>causalConnector</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define um conector de um documento NCL.<br/>
- *
+ * Este elemento é o elemento que define um conector de um documento NCL.
+ * Um conector  representa uma relação causal que pode ser utilizada pelos elos
+ * para criar sincronismo entre as mídias. Em uma relação causal, uma condição
+ * deve ser satisfeita para que ações possam ser disparadas.
+ * Este elemento possui: um identificador único (atributo id); um elemento do
+ * tipo <i>condition</i>, que tanto pode ser uma única condição simples como uma
+ * condição composta contendo condições simples e assertivas; um elemento do tipo
+ * <i>action</i> representando ou uma única ação simples, ou uma ação composta
+ * contendo um conjunto de ações simples; e parâmetros do conector cujos valores
+ * são definidos pelos elos que os utilizam.<br/>
+ * @see NCLAction
+ * @see NCLCondition
+ * @see NCLConnectorParam
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
  */
@@ -91,11 +102,12 @@ public class NCLCausalConnector<C extends NCLCausalConnector, Co extends NCLCond
     
     
     /**
-     * Atribui uma condição ao conector causal.
-     * 
+     * Atribui uma condição ao conector causal. Pode ser uma condição simples ou
+     * composta.
+     *
      * @param condition
-     *          elemento representando uma condição do conector.
-     */    
+     *          Objeto representando uma condição do conector.
+     */
     public void setCondition(Co condition) {
         //Retira o parentesco do condition atual
         if(this.condition != null)
@@ -112,7 +124,7 @@ public class NCLCausalConnector<C extends NCLCausalConnector, Co extends NCLCond
      * Retorna a condição atribuida ao conector causal.
      * 
      * @return
-     *          elemento representando uma condição do conector.
+     *          objeto representando uma condição do conector.
      */    
     public Co getCondition() {
         return condition;
@@ -120,11 +132,11 @@ public class NCLCausalConnector<C extends NCLCausalConnector, Co extends NCLCond
 
 
     /**
-     * Atribui uma ação ao conector causal.
-     * 
+     * Atribui uma ação ao conector causal. Pode ser uma ação simples ou composta.
+     *
      * @param action
      *          elemento representando uma ação do conector.
-     */    
+     */
     public void setAction(Ac action) {
         //Retira o parentesco do action atual
         if(this.action != null)
@@ -141,7 +153,7 @@ public class NCLCausalConnector<C extends NCLCausalConnector, Co extends NCLCond
      * Retorna a ação atribuida ao conector causal.
      *
      * @return
-     *          elemento representando uma ação do conector.
+     *          Objeto representando uma ação do conector.
      */
     public Ac getAction() {
         return action;
@@ -149,15 +161,15 @@ public class NCLCausalConnector<C extends NCLCausalConnector, Co extends NCLCond
 
     
     /**
-     * Adiciona um parâmetro ao conector causal NCL.     
-     * 
+     * Adiciona um parâmetro ao conector causal NCL.
+     *
      * @param param
-     *          parâmetro a ser adicionado ao conector.
+     *          Objeto representando o parâmetro a ser adicionado ao conector.
      * @return
      *          verdadeiro se o parâmetro for adicionado.
      *
      * @see TreeSet#add
-     */    
+     */
     public boolean addConnectorParam(P param) throws NCLInvalidIdentifierException {
         if(conn_params.add(param)){
             //Se param existe, atribui este como seu parente
@@ -172,12 +184,12 @@ public class NCLCausalConnector<C extends NCLCausalConnector, Co extends NCLCond
     
     /**
      * Remove um parâmetro do conector causal.
-     * 
+     *
      * @param name
-     *          nome do parâmetro a ser removido do conector.
+     *          String representando o nome do parâmetro a ser removido do conector.
      * @return
      *          verdadeiro se o parâmetro for removido.
-     */    
+     */
     public boolean removeConnectorParam(String name) {
         for(P connp : conn_params){
             if(connp.getName().equals(name))
@@ -192,7 +204,7 @@ public class NCLCausalConnector<C extends NCLCausalConnector, Co extends NCLCond
      * Remove um parâmetro do conector causal.
      *
      * @param param
-     *          parâmetro a ser removido do conector.
+     *          Objeto representando o parâmetro a ser removido do conector.
      * @return
      *          verdadeiro se o parâmetro for removido.
      */
@@ -212,7 +224,7 @@ public class NCLCausalConnector<C extends NCLCausalConnector, Co extends NCLCond
      * Verifica se o conector possui um parâmetro.
      *
      * @param name
-     *          nome do parâmetro a ser verificado.
+     *          String representando o nome do parâmetro a ser verificado.
      * @return
      *          verdadeiro se o parâmetro existir.
      */

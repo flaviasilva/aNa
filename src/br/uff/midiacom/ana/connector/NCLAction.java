@@ -41,47 +41,56 @@ import br.uff.midiacom.ana.Element;
 
 
 /**
- * Esta classe define uma ação de um conector da <i>Nested Context Language</i> (NCL).<br/>
+ * Esta interface define comportamentos comuns aos elementos do tipo ação de um
+ * conector da <i>Nested Context Language</i> (NCL).
+ * As classes que utilizam essa interface representam os elementos simpleAction 
+ * e compoundAction.<br/>
  *
- * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
+ *@see NCLSimpleAction
+ *@see NCLCompoundAction
+ *@see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
  */
+
 public interface NCLAction<T, P extends NCLConnectorParam> extends Comparable<T>, Element {
 
     /**
-     * Atribui um atraso à ação.
-     * 
-     * @param delay
-     *          inteiro contendo o atraso, em segundos.
-     * @throws java.lang.IllegalArgumentException
-     *          se o inteiro for negativo.
-     */
+ * Define o atributo delay, que representa o tempo decorrido entre a ativação do
+ * elo e o disparo da ação, em segundos.
+ * @param delay
+ *          inteiro representando o delay em segundos.
+ * @throws IllegalArgumentException
+ *          dispara uma exceção caso o valor passado como parametro seja negativo.
+ */
     public void setDelay(Integer delay);
 
 
-    /**
-     * Atribui um atraso à ação.
-     *
-     * @param delay
-     *          parâmetro representando o atraso.
-     */
+ /**
+ * Define o atributo delay, que representa o tempo decorrido entre a ativação do
+ * elo e o disparo da ação, em segundos.
+ * @param delay
+ *          Objeto do tipo connectorParam representando o delay.
+ */
+
     public void setDelay(P delay);
     
     
-    /**
-     * Retorna o atraso atribuido à ação.
-     *
-     * @return
-     *          inteiro contendo o atraso, em segundos.
-     */
+ /**
+  * Retorna o valor do atributo delay, representando o atraso entre o disparo do
+  * elo e a execução da ação.
+  *
+  * @return
+  *          inteiro contendo o delay, em segundos.
+ */
     public Integer getDelay();
 
 
-    /**
-     * Retorna o atraso atribuido à ação.
-     *
-     * @return
-     *          parâmetro representando o atraso.
-     */
+ /**
+  * Retorna o valor do atributo delay, representando o atraso entre o disparo do
+  * elo e a execução da ação.
+  *
+  * @return
+  *          Objeto do tipo connectorParam representando o delay
+ */
     public P getParamDelay();
 }

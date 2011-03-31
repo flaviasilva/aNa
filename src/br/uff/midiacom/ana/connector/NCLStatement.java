@@ -41,8 +41,12 @@ import br.uff.midiacom.ana.Element;
 
 
 /**
- * Esta classe define uma assertiva de um conector da <i>Nested Context Language</i> (NCL).<br/>
+ * Esta interface define as assertivas de um conector da <i>Nested Context Language</i> (NCL).
+ * As classes que utilizam essa interface representam os elementos
+ * <i>assessmentStatement</i> e <i>compoundStatement</i>.<br/>
  *
+ * @see NCLAssessmentStatement
+ * @see NCLCompoundStatement
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
  */

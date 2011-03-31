@@ -49,8 +49,14 @@ import org.xml.sax.XMLReader;
 
 
 /**
- * Esta classe define o elemento <i>connectorBase</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define uma base de conectores de um documento NCL.<br/>
+ * Esta classe define o elemento <i>conectorBase</i> da <i>Nested Context Language</i> (NCL).
+ * Este elemento define uma base de conectores, ou seja, uma coleção de
+ * conectores disponíveis para utilização no documento.
+ * O elemento connectorBase possui apenas um atributo, o seu identificador único
+ * (id) e seus elementos filhos são os conectores (elementos <i>causalConnector</i>)
+ * e o elemento <i>importBase</i>. O elemento importBase permite a base de
+ * conectores incorporar o conteúdo de uma outra base presente em outro documento NCL.
+ * <br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -163,7 +169,7 @@ public class NCLConnectorBase<C extends NCLCausalConnector, I extends NCLImport>
 
 
     /**
-     * Adiciona um importador de base à base de conectores.
+     * Adiciona um elemento <i>importBase</i> à base de conectores.
      *
      * @param importBase
      *          elemento representando o importador a ser adicionado.
@@ -183,7 +189,7 @@ public class NCLConnectorBase<C extends NCLCausalConnector, I extends NCLImport>
 
 
     /**
-     * Remove um importador de base da base de conectores.
+     * Remove um elemento elemento <i>importBase</i> da base de conectores.
      *
      * @param importBase
      *          elemento representando o importador a ser removido.
@@ -201,13 +207,13 @@ public class NCLConnectorBase<C extends NCLCausalConnector, I extends NCLImport>
         return false;
     }
 
-
     /**
      * Verifica se a base de conectores contém um importador de base.
      *
      * @param importBase
      *          elemento representando o importador a ser verificado.
      */
+    
     public boolean hasImportBase(I importBase) {
         return imports.contains(importBase);
     }

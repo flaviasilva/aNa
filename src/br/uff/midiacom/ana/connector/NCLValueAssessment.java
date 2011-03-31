@@ -46,7 +46,8 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>valueAssessment</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define de uma assertiva de um conector de um documento NCL.<br/>
+ * Este elemento define um valor de comparação que poderá ser utilizado nos testes
+ * realizados pelo elemento <i>assessmentStatement</i>.<br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -79,12 +80,13 @@ public class NCLValueAssessment<V extends NCLValueAssessment, P extends NCLConne
         getReader().setContentHandler(this);
     }
 
-
-    /**
-     * Construtor do elemento <i>valueAssessment</i> da <i>Nested Context Language</i> (NCL).
+/**
+     * Construtor do elemento <i>valueAssessment</i> da <i>Nested Context Language</i> (NCL). Versão
+     * que recebe como parâmetro uma String representando o valor do atributo <i>value</i>.
+ * Esse valor é definido posteriormente no elo.
      *
      * @param value
-     *          String contendo o valor da assertiva.
+     *          String contendo o valor do atributo <i>value</i> da assertiva.
      * @throws java.lang.IllegalArgumentException
      *          Se o valor a ser atribuído for uma String vazia.
      */
@@ -94,7 +96,9 @@ public class NCLValueAssessment<V extends NCLValueAssessment, P extends NCLConne
     
 
     /**
-     * Determina o valor da assertiva do conector.
+     * Determina o valor de comparação da assertiva do conector. Esse valor é
+     * definido posteriormente no elo e deve obrigatoriamente assumir um valor
+     * de estado de evento.
      *
      * @param value
      *          String contendo o valor da assertiva.
@@ -121,10 +125,12 @@ public class NCLValueAssessment<V extends NCLValueAssessment, P extends NCLConne
 
 
     /**
-     * Determina o valor da assertiva do conector.
+     * Determina o valor de comparação da assertiva do conector. Esse valor é
+     * definido posteriormente no elo e deve obrigatoriamente assumir um valor
+     * de estado de evento.
      *
      * @param value
-     *          parâmetro contendo o valor da assertiva.
+     *          Objeto do tipo <i>connectorParam</i> contendo o valor da assertiva.
      */
     public void setValue(P value) {
         this.parValue = value;
@@ -134,7 +140,7 @@ public class NCLValueAssessment<V extends NCLValueAssessment, P extends NCLConne
 
 
     /**
-     * Determina o valor da assertiva do conector. Usa um dos valores padrão.
+     * Determina o valor da assertiva do conector, utilizando um dos valores padrãos.
      *
      * @param value
      *          elemento representando o valor da assertiva.
@@ -173,10 +179,11 @@ public class NCLValueAssessment<V extends NCLValueAssessment, P extends NCLConne
 
 
     /**
-     * Retorna o valor da assetiva do conector.
+     * Retorna o valor da assertiva do conector caso este tenha sido determinado
+     * como um parâmetro de conector.
      *
      * @return
-     *          parâmetro representando o valor da assertiva.
+     *          Objeto do tipo <i>connectorParam</i> representando o valor da assertiva.
      */
     public P getParamValue() {
         return parValue;

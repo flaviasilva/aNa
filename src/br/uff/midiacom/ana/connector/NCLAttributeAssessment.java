@@ -47,8 +47,12 @@ import org.xml.sax.XMLReader;
 
 
 /**
- * Esta classe define o elemento <i>attributeStatement</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define um atributo da assertiva de um conector de um documento NCL.<br/>
+ * Esta classe define o elemento <i>attributeAssessment</i> da <i>Nested Context Language</i> (NCL).
+ * Este elemento é o elemento que define um atributo de um conector cujo valor
+ * será testado. Possui um atributo role, que representa (como usualmente) um ponto
+ * de interface entre o conector e os objetos que o utilizam. Possui também
+ * elementos <i>eventType</i> e <i>attributeType</i> que definem o tipo de evento
+ * e attributo associado a assertiva.<br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -87,13 +91,14 @@ public class NCLAttributeAssessment<A extends NCLAttributeAssessment, R extends 
     }
 
 
-    /**
-     * Determina o papel do atributo da assertiva.
-     * 
+     /**
+     * Determina o papel associado ao elemento <i>attributeAssessment</i> da
+     * assertiva.
+     *
      * @param role
-     *          String representando o papel definido pela assertiva.
+     *          Objeto representando o papel definido pela assertiva
      * @throws java.lang.IllegalArgumentException
-     *          Se o role for uma String vazia.
+     *          Se o parâmetro não for do tipo requerido
      */
     public void setRole(R role) {
         //Retira o parentesco do role atual
@@ -111,7 +116,7 @@ public class NCLAttributeAssessment<A extends NCLAttributeAssessment, R extends 
      * Retorna o papel atribuido ao atributo da assertiva.
      * 
      * @return
-     *          elemento representando o papel.
+     *          objeto representando o atributo role do atributo da assertiva.
      */
     public R getRole() {
         return role;
@@ -119,21 +124,22 @@ public class NCLAttributeAssessment<A extends NCLAttributeAssessment, R extends 
     
     
     /**
-     * Determina o tipo do evento testado pelo atributo da assertiva.
-     * 
+     * Determina o tipo do evento testado pelo atributo da assertiva. Pode
+     * assumir os valores "presentation", "selection" ou "attribution"
+     *
      * @param eventType
-     *          tipo do evento.
+     *          objeto do tipo <i>eventType</i> representando o tipo do evento.
      */
     public void setEventType(NCLEventType eventType) {
         this.eventType = eventType;
     }
     
     
-    /**
+   /**
      * Retorna o tipo do evento testado pelo atributo da assertiva.
-     * 
+     *
      * @return
-     *          elemento representando o tipo do evento.
+     *          objeto do tipo <i>eventType</i> representando o tipo do evento.
      */
     public NCLEventType getEventType() {
         return eventType;
@@ -141,10 +147,12 @@ public class NCLAttributeAssessment<A extends NCLAttributeAssessment, R extends 
     
     
     /**
-     * Determina a tecla testada pelo atributo da assertiva.
-     * 
+     * Define o atributo <i>key</i>. Quando o valor do atributo <i>eventType</i>
+     * for "selection", devemos especificar através do atributo <i>key</i> a
+     * tecla que  realizará a seleção.
+     *
      * @param key
-     *          elemento representando a tecla.
+     *          objeto representando uma tecla.
      */
     public void setKey(NCLKey key) {
         this.key = key;
@@ -153,10 +161,12 @@ public class NCLAttributeAssessment<A extends NCLAttributeAssessment, R extends 
 
 
     /**
-     * Determina a tecla testada pelo atributo da assertiva.
+     * Define o atributo <i>key</i>. Quando o valor do atributo <i>eventType</i>
+     * for "selection", devemos especificar através do atributo <i>key</i> a
+     * tecla que realizará a seleção.
      *
      * @param key
-     *          parâmetro representando a tecla.
+     *          objeto do tipo connectorParam que representa a tecla.
      */
     public void setKey(P key) {
         this.parKey = key;
@@ -164,11 +174,11 @@ public class NCLAttributeAssessment<A extends NCLAttributeAssessment, R extends 
     }
     
     
-    /**
-     * Retorna a tecla testada pelo atributo da assertiva.
-     * 
+   /**
+     * Retorna a tecla correspondente ao atributo <i>key</i>.
+     *
      * @return
-     *          elemento representando a tecla.
+     *          objeto representando uma tecla.
      */
     public NCLKey getKey() {
         return key;
@@ -176,10 +186,10 @@ public class NCLAttributeAssessment<A extends NCLAttributeAssessment, R extends 
 
 
     /**
-     * Retorna a tecla testada pelo atributo da assertiva.
+     * Retorna a tecla correspondente ao atributo <i>key</i>.
      *
      * @return
-     *          parâmetro representando a tecla.
+     *          objeto do tipo connectorParam que representa a tecla.
      */
     public P getParamKey() {
         return parKey;
@@ -187,10 +197,10 @@ public class NCLAttributeAssessment<A extends NCLAttributeAssessment, R extends 
     
     
     /**
-     * Determina o tipo do atributo testado pelo atributo da assertiva.
-     * 
+     * Determina o tipo do atributo testado pelo elemento <i>attributeAssessment</i>.
+     *
      * @param attributeType
-     *          elemento representando o tipo do atributo.
+     *          Objeto representando o tipo do atributo.
      */
     public void setAttributeType(NCLAttributeType attributeType) {
         this.attributeType = attributeType;
@@ -198,10 +208,10 @@ public class NCLAttributeAssessment<A extends NCLAttributeAssessment, R extends 
     
     
     /**
-     * Retorna o tipo do atributo testado pelo atributo da assertiva.
-     * 
+     * Retorna o tipo do atributo testado pelo elemento <i>attributeAssessment</i>.
+     *
      * @return
-     *          elemento representando o tipo do atributo.
+     *          Objeto representando o tipo do atributo.
      */
     public NCLAttributeType getAttributeType() {
         return attributeType;
@@ -229,7 +239,8 @@ public class NCLAttributeAssessment<A extends NCLAttributeAssessment, R extends 
      * Determina o offset de teste.
      *
      * @param offset
-     *          parâmetro representando o valor do offset a ser utilizado no teste.
+     *          objeto do tipo connectorParam representando o valor do offset a
+     * ser utilizado no teste.
      */
     public void setOffset(P offset) {
         this.parOffset = offset;
@@ -239,7 +250,7 @@ public class NCLAttributeAssessment<A extends NCLAttributeAssessment, R extends 
     
     /**
      * Retorna o offset de teste.
-     * 
+     *
      * @return
      *          inteiro representando o valor do offset a ser utilizado no teste.
      */
@@ -252,7 +263,8 @@ public class NCLAttributeAssessment<A extends NCLAttributeAssessment, R extends 
      * Retorna o offset de teste.
      *
      * @return
-     *          parâmetro representando o valor do offset a ser utilizado no teste.
+     *          objeto do tipo connectorParam representando o valor do offset a
+     * ser utilizado no teste.
      */
     public P getParamOffset() {
         return parOffset;
@@ -493,7 +505,13 @@ public class NCLAttributeAssessment<A extends NCLAttributeAssessment, R extends 
         return null;
     }
 
-
+/**
+ *  Função de criação do papel relacionado ao elemento <i>attributeAssessment</i>.
+ * @param name
+ *      String representando o nome do papel
+ * @return
+ *      O objeto <i>role</i> criado
+ */
     protected R createRole(String name) {
         return (R) new NCLRole(name);
     }

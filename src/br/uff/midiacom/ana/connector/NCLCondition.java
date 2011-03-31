@@ -41,8 +41,13 @@ import br.uff.midiacom.ana.Element;
 
 
 /**
- * Esta classe define uma condição de um conector da <i>Nested Context Language</i> (NCL).<br/>
+ * Esta interface define comportamentos comuns aos elementos do tipo condição de
+ * um conector da <i>Nested Context Language</i> (NCL).
+ * As classes que utilizam essa interface representam os elementos simpleCondition
+ * e compoundCondition.<br/>
  *
+ * @see br.uff.midiacom.ana.connector.NCLSimpleCondition
+ * @see br.uff.midiacom.ana.connector.NCLCompoundCondition
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
  */
@@ -51,28 +56,30 @@ public interface NCLCondition<T, P extends NCLConnectorParam> extends Comparable
     
 
 
-    /**
-     * Atribui um atraso à condição.
-     *
-     * @param delay
-     *          inteiro contendo o atraso, em segundos.
-     * @throws java.lang.IllegalArgumentException
-     *          se o inteiro for negativo.
-     */
+   /**
+    * Define o atributo delay, que representa o tempo decorrido entre o evento
+    * que satisfaz a condição e a ativação do elo, em segundos.
+    * @param delay
+    *          inteiro representando o delay, em segundos.
+    * @throws IllegalArgumentException
+    *          dispara uma exceção caso o valor passado como parametro seja negativo.
+    */
     public void setDelay(Integer delay);
 
 
     /**
-     * Atribui um atraso à condição.
+     * Define o atributo delay, que representa o tempo decorrido entre o evento
+     * que satisfaz a condição e a ativação do elo, em segundos.
      *
      * @param delay
-     *          parâmetro representando o atraso.
+     *          Objeto do tipo connectorParam representando o delay.
      */
     public void setDelay(P delay);
 
 
     /**
-     * Retorna o atraso atribuido à condição.
+     * Retorna o valor do atributo delay, representando o atraso entre o evento
+     * que satisfaz a condição e a ativação do elo.
      *
      * @return
      *          inteiro contendo o atraso, em segundos.
@@ -81,10 +88,11 @@ public interface NCLCondition<T, P extends NCLConnectorParam> extends Comparable
 
 
     /**
-     * Retorna o atraso atribuido à condição.
+     * Retorna o valor do atributo delay, representando o atraso entre a o evento
+     * que satisfaz a condição e a ativação do elo.
      *
      * @return
-     *          parâmetro representando o atraso.
+     *          objeto do tipo connectorParam representando o delay.
      */
     public P getParamDelay();
 }
