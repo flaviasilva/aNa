@@ -48,7 +48,7 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>bindRule</i> de um switch de descritor da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define um bind de um switch de descritor de um documento NCL.<br/>
+ * Este elemento é o elemento que define o bindRule, elemento que relaciona através dos atributos rule e constituent uma regra e um descritor.<br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -82,7 +82,7 @@ public class NCLBindRule<B extends NCLBindRule, D extends NCLDescriptor, R exten
 
 
     /**
-     * Atribui um constituent ao bind.
+     * Atribui um descritor ao elemento constituent do bind.
      *
      * @param constituent
      *          elemento representando o descritor mapeado pelo bind.
@@ -92,8 +92,8 @@ public class NCLBindRule<B extends NCLBindRule, D extends NCLDescriptor, R exten
     }
 
 
-    /**
-     * Retorna o constituent do bind.
+     /**
+     * Retorna o descritor representando o elemento constituent do bind.
      *
      * @return
      *          elemento representando o descritor mapeado pelo bind.
@@ -116,7 +116,7 @@ public class NCLBindRule<B extends NCLBindRule, D extends NCLDescriptor, R exten
 
     /**
      * Retorna a regra de avaliação do bind.
-     * 
+     *
      * @return
      *          elemento representando a regra de avaliação do bind.
      */
@@ -147,6 +147,15 @@ public class NCLBindRule<B extends NCLBindRule, D extends NCLDescriptor, R exten
         return content;
     }
 
+    /**
+    * Compara o dois bindRules, o atual e algum outro.
+    *
+    * @param other
+    *          elemento representando o bindRule a ser comparado com o atual.
+    * @return
+    * retorn 0 se os bindRules forem iguais
+    *    retorna 1 se forem diferentes
+ */
 
     public int compareTo(B other) {
         int comp = 0;
@@ -223,7 +232,12 @@ public class NCLBindRule<B extends NCLBindRule, D extends NCLDescriptor, R exten
             ruleReference();
     }
 
-
+   /** Procura pelo objeto ruleBase e retorna as regras nele contidas. Caso não encontre este objeto, o retorno é uma referencia null.
+    *
+    * @return
+    *  Retorna um objeto Iterable contendo as regras presentes na base de regras de um documento NCL.
+    * existam
+    */
     private Iterable<R> getRules() {
         NCLElement head = getParent();
 
@@ -243,7 +257,11 @@ public class NCLBindRule<B extends NCLBindRule, D extends NCLDescriptor, R exten
         return ((NCLHead) head).getRuleBase().getRules();
     }
 
-
+    /**
+    * Verifica se o descritor associado ao elemento constituent foi definido
+    * dentro do elemento descriptorSwitch. Em caso negativo, adiciona uma advertência
+    * a lista de advertências.
+    */
     private void constituentReference() {
         //Search for a component node in its parent
         Iterable<D> descriptors = ((NCLDescriptorSwitch) getParent()).getDescriptors();
@@ -258,7 +276,12 @@ public class NCLBindRule<B extends NCLBindRule, D extends NCLDescriptor, R exten
         addWarning("Could not find descriptor in descriptorSwitch with id: " + getConstituent().getId());
     }
 
-
+     /**
+     * Verifica se a regra associada ao bind existe na base de regras do documento.
+     * Em caso negativo, adiciona uma advertência
+     * a lista de advertências.
+     */
+    
     private void ruleReference() {
         //Search for the interface inside the node
         Iterable<R> rules = getRules();

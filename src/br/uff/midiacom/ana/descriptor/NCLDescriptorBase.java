@@ -50,7 +50,14 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>descriptorBase</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define uma base de descritores de um documento NCL.<br/>
+ * Este elemento define uma base de descritores, ou seja, uma coleção de descritores disponíveis para utilização no documento.
+ * Existem duas restrições importantes quanto a este elemento:
+ * uma aplicação NCL está habilitada a possuir apenas uma base de descritores.
+ * aninhamentos de descritores não são permitidos.
+ * O elemento descriptorBase possui apenas um atributo id, que é opcional. Neste elemento, o id serve para possibilitar o reúso
+ * da base em uma outra aplicação.
+ * O elemento importBase permite a base de descritores incorporar o conteúdo de uma outra base presente em outro documento NCL.
+ * <br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -85,7 +92,7 @@ public class NCLDescriptorBase<D extends NCLLayoutDescriptor, I extends NCLImpor
 
     /**
      * Adiciona um descritor à base de descritores.
-     * 
+     *
      * @param descriptor
      *          elemento representando o descritor a ser adicionado.
      *
@@ -104,10 +111,10 @@ public class NCLDescriptorBase<D extends NCLLayoutDescriptor, I extends NCLImpor
 
 
     /**
-     * Remove um descritor da base de descritores.
+     * Remove um descritor da base de descritores a partir do seu id.
      *
      * @param id
-     *          identificador do descritor a ser removido.
+     *          String representando o identificador do descritor a ser removido.
      * @return
      *          Verdadeiro se o descritor foi removido.
      *
@@ -123,8 +130,9 @@ public class NCLDescriptorBase<D extends NCLLayoutDescriptor, I extends NCLImpor
     
 
     /**
-     * Remove um descritor da base de descritores.
-     * 
+     * Remove um descritor da base de descritores a partir de uma referencia ao
+     * proprio descritor a ser removido.
+     *
      * @param descriptor
      *          elemento representando o descritor a ser removido.
      *
@@ -144,9 +152,9 @@ public class NCLDescriptorBase<D extends NCLLayoutDescriptor, I extends NCLImpor
 
     /**
      * Verifica se a base de descritores contém um descritor.
-     * 
+     *
      * @param descriptor
-     *          elemento representando o descritor a ser verificado.
+     *         Referencia ao descritor a ser verificado.
      */
     public boolean hasDescriptor(D descriptor) {
         return descriptors.contains(descriptor);
@@ -155,7 +163,7 @@ public class NCLDescriptorBase<D extends NCLLayoutDescriptor, I extends NCLImpor
 
     /**
      * Verifica se a base de descritores possui algum descritor.
-     * 
+     *
      * @return
      *          verdadeiro se a base de descritores possuir algum descritor.
      */
@@ -176,7 +184,7 @@ public class NCLDescriptorBase<D extends NCLLayoutDescriptor, I extends NCLImpor
 
 
     /**
-     * Adiciona um importador de base à base de descritores.
+     * Adiciona um elemento importBase à base de descritores.
      *
      * @param importBase
      *          elemento representando o importador a ser adicionado.
@@ -194,9 +202,8 @@ public class NCLDescriptorBase<D extends NCLLayoutDescriptor, I extends NCLImpor
         return false;
     }
 
-
     /**
-     * Remove um importador de base da base de descritores.
+     * Remove um elemento importBase da base de descritores.
      *
      * @param importBase
      *          elemento representando o importador a ser removido.
@@ -216,10 +223,12 @@ public class NCLDescriptorBase<D extends NCLLayoutDescriptor, I extends NCLImpor
 
 
     /**
-     * Verifica se a base de descritores contém um importador de base.
+     * Verifica se a base de descritores contém um elemento importBase.
      *
      * @param importBase
      *          elemento representando o importador a ser verificado.
+     * @return
+     *      verdadeiro se o a base de descritores contém o elemento importBase
      */
     public boolean hasImportBase(I importBase) {
         return imports.contains(importBase);
@@ -227,10 +236,10 @@ public class NCLDescriptorBase<D extends NCLLayoutDescriptor, I extends NCLImpor
 
 
     /**
-     * Verifica se a base de descritores possui algum importador de base.
+     * Verifica se a base de descritores possui algum elemento importBase.
      *
      * @return
-     *          verdadeiro se a base de descritores possuir algum importador de base.
+     *          verdadeiro se a base de descritores possuir algum elemento importBase.
      */
     public boolean hasImportBase() {
         return !imports.isEmpty();
@@ -238,10 +247,10 @@ public class NCLDescriptorBase<D extends NCLLayoutDescriptor, I extends NCLImpor
 
 
     /**
-     * Retorna os importadores de base da base de descritores.
+     * Retorna os elementos importBase da base de descritores.
      *
      * @return
-     *          objeto Iterable contendo os importadores de base da base de descritores.
+     *          objeto Iterable contendo os elemento importBase da base de descritores.
      */
     public Iterable<I> getImportBases() {
         return imports;

@@ -45,7 +45,8 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>descriptorParam</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define um parametro de descritor em um documento NCL.<br/>
+ * Este elemento é o elemento que define um parametro de um descritor como um par name (nome da propriedade do elemento descriporParam) e value(valor a ela associado).
+ * Cada descritor pode conter diversos elementos <i>descriptorParam</i>.<br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -79,7 +80,7 @@ public class NCLDescriptorParam<P extends NCLDescriptorParam> extends NCLElement
 
 
     /**
-     * Atribui um nome ao parâmetro. Segue os nomes padronizados de atributos do descritor.
+     * Atribui um nome a propriedade do parâmetro, dentre as propriedades padronizadas do NCL.
      *
      * @param name
      *          Elemento representando o nome do parâmetro.
@@ -90,7 +91,7 @@ public class NCLDescriptorParam<P extends NCLDescriptorParam> extends NCLElement
 
 
     /**
-     * Retorna o nome do parâmetro.
+     * Retorna o nome da propriedade do parâmetro.
      *
      * @return
      *          elemento representando o nome do parâmetro.
@@ -101,12 +102,12 @@ public class NCLDescriptorParam<P extends NCLDescriptorParam> extends NCLElement
 
 
     /**
-     * Atribui um valor ao parâmetro.
+     * Atribui um valor ao atributo value do parâmetro.
      *
      * @param value
      *          String representando o valor do parâmetro.
      * @throws IllegalArgumentException
-     *          se a String for vazia.
+     *          Dispara uma exceção caso a String representando o valor seja vazia.
      */
     public void setValue(String value) throws IllegalArgumentException {
         if(value != null && "".equals(value.trim()))
@@ -117,7 +118,7 @@ public class NCLDescriptorParam<P extends NCLDescriptorParam> extends NCLElement
 
 
     /**
-     * Retorna o valor do parâmetro.
+     * Retorna uma string representando o valor atribuido ao atributo value do parâmetro.
      *
      * @return
      *          String representando o valor do parâmetro.
@@ -150,7 +151,15 @@ public class NCLDescriptorParam<P extends NCLDescriptorParam> extends NCLElement
         return content;
     }
 
-
+    /**
+     * Compara o DescriptorParam atual a um outro objeto DescriptorParam, através
+     * do valor do atributo name.
+     * @param other
+     *      DescriptorParam que será comparado ao atual.
+     * @return
+     *      0, se os parâmetros forem iguais.
+     *      1 ou -1, se os parâmetros forem diferentes.
+     */
     public int compareTo(P other) {
         return getName().compareTo(other.getName());
     }

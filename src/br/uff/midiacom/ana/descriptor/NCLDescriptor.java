@@ -54,7 +54,12 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>descriptor</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define um descritor em um documento NCL.<br/>
+ * Este elemento é responsável pela definição dos parâmetros de exibição de uma mídia.
+ * Isto é, o descritor e responsavel pela configuração da forma de exibição de
+ * cada objeto de mídia.
+ *
+ * Os descritores são definidos no cabeçalho do documento, assim como as regiões, dentro de uma base de descritores (elemento descriptorBase).
+ *
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -83,12 +88,13 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
 
     /**
-     * Construtor do elemento <i>descriptor</i> da <i>Nested Context Language</i> (NCL).
+     * Construtor do elemento <i>descriptor</i> da <i>Nested Context Language</i> (NCL). Fica a cargo desta versão do contrutor especificar
+     * o atributo id do descritor criado.
      *
      * @param id
-     *          identificador do descritor.
+     *          Identificador único do descritor.
      * @throws br.pensario.NCLInvalidIdentifierException
-     *          se o identificador do descritor não for válido.
+     *          Excceção disparada caso o identificador fornecido seja inválido.
      */
     public NCLDescriptor(String id) throws NCLInvalidIdentifierException {        
         setId(id);
@@ -112,12 +118,15 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
 
     /**
-     * Identifica o node da ferramenta de apresentação utilizada pelo descritor.
+     * Identifica a ferramenta de apresentação que será utilizada na exibição do
+     * objeto de mídia relacionado ao descritor. Quando esse aributo é omitido
+     * o formatador NCL associa automaticamente, através do elemento type ou da
+     * extensão do arquivo fonte, o exibidor adequado aquela midia.
      *
      * @param player
-     *          nome da ferramenta a ser utilizada.
+     *          string representando o nome da ferramenta a ser utilizada.
      * @throws java.lang.IllegalArgumentException
-     *          se a String passada como parâmetro for vazia.
+     *          Dispara uma exceção caso a String passada como parâmetro seja vazia.
      */
     public void setPlayer(String player) throws IllegalArgumentException {
         if(player != null && "".equals(player.trim()))
@@ -128,10 +137,10 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
 
     /**
-     * Retorna o node da ferramenta de apresentação utilizada pelo descritor.
+     * Retorna o nome da ferramenta de exibição associada ao descritor.
      *
      * @return
-     *          String contendo o nome da ferramenta.
+     *          String representando o nome da ferramenta.
      */
     public String getPlayer() {
         return player;
@@ -139,7 +148,9 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
 
     /**
-     * Atribui uma duração explícita ao descritor.
+     * Define a duração explícita do objeto de mídia associado. Caso esse atributo
+     * não seja especificado os objetos serão exibidos com sua duração natural.
+     * Objetos de texto e imagens estáticas possuem duração intrinseca infinita.
      *
      * @param explicitDur
      *          inteiro representando a duração a ser usada pelo descritor em segundos.
@@ -165,7 +176,8 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
      * Este último quadro será apresentando até o fim da duração definida no descritor.
      *
      * @param freeze
-     *          booleano definindo se o último quadro deverá ser exibido continuamente.
+     *          booleano definindo se o último quadro deverá ser exibido continuamente
+     * (true) ou não (false).
      */
     public void setFreeze(Boolean freeze) {
         this.freeze = freeze;
@@ -185,7 +197,8 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
     
     /**
-     * Atribui qual o próximo descritor deverá receber foco quando a tecla seta para
+     * Atributo relacionado a funcionalidade de navegação por teclas dos objetos de mídia.
+     * Define qual o próximo descritor a  receber foco quando a tecla seta para
      * a esquerda do controle remoto for pressionada e o foco estiver neste descritor.
      *
      * @param descriptor
@@ -197,7 +210,7 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
 
     /**
-     * Retorna o próximo descritor deverá receber foco quando a tecla seta para
+     * Retorna o próximo descritor a receber foco quando a tecla seta para
      * a esquerda do controle remoto for pressionada e o foco estiver neste descritor.
      *
      * @return
@@ -209,9 +222,10 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
 
     /**
-     * Atribui qual o próximo descritor deverá receber foco quando a tecla seta para
+     * Atributo relacionado a funcionalidade de navegação por teclas dos objetos de mídia.
+     * Define qual o próximo descritor a  receber foco quando a tecla seta para
      * a direita do controle remoto for pressionada e o foco estiver neste descritor.
-     * 
+     *
      * @param descriptor
      *          elemento representando o descritor que receberá foco.
      */
@@ -221,7 +235,7 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
 
     /**
-     * Retorna o próximo descritor deverá receber foco quando a tecla seta para
+     * Retorna o próximo descritor a receber foco quando a tecla seta para
      * a direita do controle remoto for pressionada e o foco estiver neste descritor.
      *
      * @return
@@ -233,7 +247,8 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
 
     /**
-     * Atribui qual o próximo descritor deverá receber foco quando a tecla seta para
+     * Atributo relacionado a funcionalidade de navegação por teclas dos objetos de mídia.
+     * Define qual o próximo descritor a  receber foco quando a tecla seta para
      * cima do controle remoto for pressionada e o foco estiver neste descritor.
      *
      * @param descriptor
@@ -245,7 +260,7 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
 
     /**
-     * Retorna o próximo descritor deverá receber foco quando a tecla seta para
+     * Retorna o próximo descritor a receber foco quando a tecla seta para
      * cima do controle remoto for pressionada e o foco estiver neste descritor.
      *
      * @return
@@ -256,8 +271,9 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
     }
 
 
-    /**
-     * Atribui qual o próximo descritor deverá receber foco quando a tecla seta para
+   /**
+     * Atributo relacionado a funcionalidade de navegação por teclas dos objetos de mídia.
+     * Define qual o próximo descritor a  receber foco quando a tecla seta para
      * baixo do controle remoto for pressionada e o foco estiver neste descritor.
      *
      * @param descriptor
@@ -269,7 +285,7 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
     
     /**
-     * Retorna o próximo descritor deverá receber foco quando a tecla seta para
+     * Retorna o próximo descritor que deverá receber foco quando a tecla seta para
      * baixo do controle remoto for pressionada e o foco estiver neste descritor.
      *
      * @return
@@ -281,7 +297,8 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
     
     
     /**
-     * Atribui um índice de foco para o descritor.
+     * Atributo associado a funcionalidade da navegação por teclas do controle remoto. Cada objeto de mídia é relacionado
+     * a um indice de foco, que por sua vez pode ser relacionado aos atributos move de outras mídias. Quando as teclas direcionais são pressionadas, o foco muda para a mídia cujo indice esteja associado aquela tecla.
      *
      * @param focusIndex
      *          inteiro representando o índice de foco do descritor.
@@ -315,7 +332,7 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
     /**
      * Retorna a cor para a borda do descritor quando este está em foco utilizada.
-     * 
+     *
      * @return
      *          cor da borda do descritor.
      */
@@ -353,7 +370,7 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
      *          inteiro representando a percentagem relativa a transparência da borda.
      *          o inteiro deve estar no intervalo [0,100].
      * @throws java.lang.IllegalArgumentException
-     *          se o valor estiver fora do intervalo.
+     *          Dispara uma exceção caso o valor fornecido esteja fora do intervalo.
      */
     public void setFocusBorderTransparency(Integer focusBorderTransparency) throws IllegalArgumentException {
         if(focusBorderTransparency != null && (focusBorderTransparency < 0 || focusBorderTransparency > 100))
@@ -376,12 +393,13 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
 
     /**
-     * Atribui a URI do conteúdo alternativo que é exibido quando o descritor está em foco.
+     * Ncl permite que o próprio objeto de mídia seja alterado quando o escritor ganha foco.
+     * Este método especifica a URI do conteúdo alternativo que é exibido quando o descritor está em foco.
      *
      * @param focusSrc
      *          String contendo a URI do conteúdo alternativo.
      * @throws java.net.URISyntaxException
-     *          se a URI não for válida.
+     *          Exceção disparada caso seja fornecida uma URI não for válida.
      *
      * @see java.net.URI
      */
@@ -394,6 +412,7 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
 
     /**
+     * Ncl permite que o próprio objeto de mídia seja alterado quando o escritor ganha foco.
      * Retorna a URI do conteúdo alternativo que é exibido quando o descritor está em foco.
      *
      * @return
@@ -405,12 +424,13 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
 
     /**
-     * Atribui a URI do conteúdo alternativo que é exibido quando o descritor é selecionado.
+     * É possível alterar a mídia relacionada ao descritor quando este é selecionado.
+     * Este método atribui a URI do conteúdo alternativo que é exibido quando o descritor é selecionado.
      *
      * @param focusSelSrc
      *          String contendo a URI do conteúdo alternativo.
      * @throws java.net.URISyntaxException
-     *          se a URI não for válida (@see java.net.URI).
+     *          Exceção disparada caso seja fornecida uma URI não for válida.
      */
     public void setFocusSelSrc(String focusSelSrc) throws URISyntaxException {
         if(focusSelSrc != null)
@@ -421,11 +441,12 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
 
     /**
+     * É possível alterar a mídia relacionada ao descritor quando este é selecionado.
      * Retorna a URI do conteúdo alternativo que é exibido quando o descritor é selecionado.
      *
      * @return
      *          String contendo a URI do conteúdo alternativo.
-     */    
+     */
     public String getFocusSelSrc() {
         return focusSelSrc;
     }
@@ -475,7 +496,7 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
     }
 
 
-    /**
+   /**
      * Atribui uma transição de saida ao descritor.
      *
      * @param transOut
@@ -508,7 +529,7 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
     }
 
 
-    /**
+   /**
      * Retorna a região relacionada ao descritor.
      *
      * @return
@@ -560,7 +581,7 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
 
 
     /**
-     * Verifica se o descritor contém um parâmetro.
+     * Verifica se o descritor contém um parâmetro específico.
      *
      * @param descriptorParam
      *          elemento representando o parâmetro a ser verificado.
@@ -657,7 +678,14 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
         return content;
     }
 
-
+    /**
+     * Compara dois descritores  de layout através de seu atributo Id.
+     *
+     * @param other
+     *  descritor que se deseja comparar ao atual
+     * @return
+     *  Verdadeiro caso os descritores sejam o mesmo. Falso caso contrário.
+     */
     public int compareTo(L other) {
         return getId().compareTo(other.getId());
     }
@@ -799,7 +827,11 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
         }
     }
 
-
+    /**
+     * Verifica se a região vinculada ao descritor existe na base de regiões do
+     * documento. Caso essa região não exista, o documento não possua um elemento head
+     * ou uma base de regiões, advertencias são adicionadas a lista d advertencias.
+     */
     private void regionReference() {
         //Search for the interface inside the node
         NCLElement head = getParent();
@@ -820,7 +852,15 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
         setRegion(findRegion(((NCLHead) head).getRegionBase().getRegions()));
     }
 
-
+    /**
+     * Procura pela região do descritor dentre um conunto de elementos region.
+     * @param regions
+     * objeto Iterable  a ser pesquisado
+     * @return
+     *  a região, caso ela exista.
+     * null, caso não exista.
+     *
+     */
     private R findRegion(Iterable<R> regions) {
         for(R reg : regions){
             if(reg.hasRegion()){
@@ -838,7 +878,12 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
         return null;
     }
 
-
+    /**
+     * Verifica se o descritor definido e todos os que se relacionam a ele existem
+     * na base de descritores do documento. Caso um dos descritor não exista, o documento
+     * não possua um elemento head ou uma base de descritores, advertencias são
+     * adicionadas a lista d advertencias.
+     */
     private void descriptorReference() {
         //Search for the interface inside the node
         NCLElement head = getParent();
@@ -865,7 +910,14 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
             setMoveRight(findDescriptor(((NCLHead) head).getDescriptorBase().getDescriptors(), getMoveRight()));
     }
 
-
+    /**
+     * Procura por um descritor (vinculado aos atributos move) dado um conjunto de descritores.
+     * @param descriptors
+     * conjunto de descritores que se deja pesquisar
+     * @param move
+     * descritor cuja existência se deseja verificar
+     * @return
+     */
     private D findDescriptor(Iterable<NCLLayoutDescriptor> descriptors, D move) {
         for(NCLLayoutDescriptor descriptor : descriptors){
             if(descriptor instanceof NCLDescriptorSwitch){
@@ -886,7 +938,15 @@ public class NCLDescriptor<D extends NCLDescriptor, R extends NCLRegion, L exten
         return null;
     }
 
-
+    /**
+     * Verifica se a transição vinculada ao descritor existe na base de transições
+     * do documento.
+     *
+     * @param transition
+     *  transição cuja existência se deseja verificar.
+     * @return
+     *  a transição, da forma como foi definida na base.
+     */
     private T transitionReference(T transition) {
         //Search for the interface inside the node
         NCLElement head = getParent();

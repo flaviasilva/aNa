@@ -50,7 +50,9 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>descriptorSwitch</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define um switch de descritor em um documento NCL.<br/>
+ * O switch de descritores seleciona um descritor conforme a verificação de uma regra, proporcionando adaptação da forma
+ * de apresentação ao andamento da execução do documento. Assim como nos nós Switch, cada regra é associada a seu
+ * descritor através de elementos <i>bindRule</i><br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -68,7 +70,7 @@ public class NCLDescriptorSwitch<D extends NCLDescriptor, B extends NCLBindRule,
      * @param id
      *          identificador do switch de descritor.
      * @throws br.pensario.NCLInvalidIdentifierException
-     *          se o identificador do switch de descritor não for válido.
+     *          Dispara uma exceção caso o identificador do switch de descritor não seja válido.
      */
     public NCLDescriptorSwitch(String id) throws NCLInvalidIdentifierException {
         setId(id);
@@ -117,7 +119,7 @@ public class NCLDescriptorSwitch<D extends NCLDescriptor, B extends NCLBindRule,
      * @param id
      *          identificador do descritor a ser removido.
      * @return
-     *          Verdadeiro se o descritor foi removido.
+     *          Verdadeiro se o descritor for removido com sucesso.
      *
      * @see TreeSet#remove
      */
@@ -135,6 +137,8 @@ public class NCLDescriptorSwitch<D extends NCLDescriptor, B extends NCLBindRule,
      *
      * @param descriptor
      *          elemento representando o descritor a ser removido.
+     * @return
+     *      verdadeiro se o descritor for removido com sucesso.
      *
      * @see TreeSet#remove
      */
@@ -162,10 +166,10 @@ public class NCLDescriptorSwitch<D extends NCLDescriptor, B extends NCLBindRule,
 
 
     /**
-     * Verifica se o switch de descritor possui algum descritor.
+     * Verifica se o switch de descritor contém um descritor.
      *
-     * @return
-     *          verdadeiro se o switch de descritor possuir algum descritor.
+     * @param descriptor
+     *          elemento representando o descritor a ser verificado.
      */
     public boolean hasDescriptor() {
         return !descriptors.isEmpty();
@@ -189,7 +193,7 @@ public class NCLDescriptorSwitch<D extends NCLDescriptor, B extends NCLBindRule,
      * @param bind
      *          elemento representando o bind a ser adicionado.
      *
-     * @see ArrayList#add
+     * @see TreeSet#add
      */
     public boolean addBind(B bind) {
         if(bind != null && binds.add(bind)){
@@ -208,7 +212,7 @@ public class NCLDescriptorSwitch<D extends NCLDescriptor, B extends NCLBindRule,
      * @param bind
      *          elemento representando o bind a ser removido.
      *
-     * @see ArrayList#remove
+     * @see TreeSet#remove
      */
     public boolean removeBind(B bind) {
         if(binds.remove(bind)){
@@ -312,7 +316,18 @@ public class NCLDescriptorSwitch<D extends NCLDescriptor, B extends NCLBindRule,
         return content;
     }
 
-
+    /**
+     * Compara o switch de descritores atual a um outro switch de descritores,
+     * através do atributo Id.
+     *
+     * @param other
+     *  elemento representando o switch de descritores a que se deseja comparar
+     * o atual
+     *
+     * @return
+     *      0, se os switches possuem o mesmo identificador
+     *      -1 ou 1, se os switches possuem identificadores diferentes
+     */
     public int compareTo(L other) {
         return getId().compareTo(other.getId());
     }
@@ -425,7 +440,11 @@ public class NCLDescriptorSwitch<D extends NCLDescriptor, B extends NCLBindRule,
         }
     }
 
-
+    /**
+     * Verifica se o descritor default referenciado pelo switch d descritores
+     * existe na base de descritores. Em caso negativo, adiciona uma advertencia a
+     * lista de advertencias.
+     */
     private void defaultDescriptorReference() {
         //Search for a component node in its parent
         for(D descriptor : descriptors){
