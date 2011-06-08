@@ -54,7 +54,14 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>link</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define um elo de um documento NCL.<br/>
+ * Este elemento define os relacionamentos entre mídias de um documento NCL.
+ * O elo especifica o relacionamento atraves do atributo <i>xconnector</i> e dos elementos <i>bind</i>.
+ * O conector define a natureza da interação entre as mídias, através da especificação de condições para a ativação do elo e ações a serem executadas quando este é ativado.
+ * O bind associa os participantes do relacionamento aos seus respectivos papéis. Existem ainda os elementos do tipo parâmetro, <i>linkParam</i>, que atribuem valor a um parâmetro
+ * do conector.<br/>
+ *
+ * @see NCLParam
+ * @see NCLBind
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -90,10 +97,11 @@ public class NCLLink<L extends NCLLink, P extends NCLParam, B extends NCLBind, C
 
 
     /**
-     * Atribui um conector ao link.
-     * 
+     * Atribui um conector ao link. Ele será responsável por definir a forma do relacionamento, isto é, as condições que deverão ser satisfeitas e as
+     * ações que serão executadas caso as condições sejam satisfeita.
+     *
      * @param xconnector
-     *          conector a ser atribuido ao link.
+     *          Objeto representando o conector a ser atribuido ao link.
      */
     public void setXconnector(C xconnector) {
         this.xconnector = xconnector;
@@ -102,9 +110,9 @@ public class NCLLink<L extends NCLLink, P extends NCLParam, B extends NCLBind, C
     
     /**
      * Retorna o conector do link.
-     * 
+     *
      * @return
-     *          conector atribuido ao link.
+     *          Objeto representando o conector associado ao link.
      */
     public C getXconnector() {
         return xconnector;
@@ -112,8 +120,8 @@ public class NCLLink<L extends NCLLink, P extends NCLParam, B extends NCLBind, C
     
     
     /**
-     * Adiciona um parâmetro ao link.
-     * 
+     * Adiciona um parâmetro ao link. Este parâmetro representa um par atributo-valor que informa ao elo uma característica adicional do relacionamento.
+     *
      * @param param
      *          elemento representando o parâmetro a ser adicionado.
      * @return
@@ -135,7 +143,7 @@ public class NCLLink<L extends NCLLink, P extends NCLParam, B extends NCLBind, C
     
     /**
      * Remove um parâmetro do link.
-     * 
+     *
      * @param param
      *          elemento representando o parâmetro a ser removido.
      * @return
@@ -157,7 +165,7 @@ public class NCLLink<L extends NCLLink, P extends NCLParam, B extends NCLBind, C
     
     /**
      * Verifica se o link possui um parâmetro.
-     * 
+     *
      * @param param
      *          elemento representando o parâmetro a ser verificado.
      * @return
@@ -170,7 +178,7 @@ public class NCLLink<L extends NCLLink, P extends NCLParam, B extends NCLBind, C
     
     /**
      * Verifica se o link possui algum parâmetro.
-     * 
+     *
      * @return
      *          verdadeiro se o link possui algum parâmetro.
      */
@@ -181,7 +189,7 @@ public class NCLLink<L extends NCLLink, P extends NCLParam, B extends NCLBind, C
     
     /**
      * Retorna os parâmetros do link.
-     * 
+     *
      * @return
      *          objeto Iterable contendo os parâmetros do link.
      */
@@ -190,15 +198,16 @@ public class NCLLink<L extends NCLLink, P extends NCLParam, B extends NCLBind, C
     }
     
     
-    /**
-     * Adiciona um bind ao link.
-     * 
+     /**
+     * Adiciona um bind ao link. Este é o elemento responsável por fazer a associação
+     * entre um papel do conector e a mídia que participará do relacionamento.
+     *
      * @param bind
      *          elemento representando o bind a ser adicionado.
      * @return
      *          verdadeiro se o bind for adicionado.
      *
-     * @see ArrayList#add
+     * @see TreeSet#add
      */
     public boolean addBind(B bind) {
         if(bind != null && binds.add(bind)){
@@ -213,13 +222,13 @@ public class NCLLink<L extends NCLLink, P extends NCLParam, B extends NCLBind, C
     
     /**
      * Remove um bind do link.
-     * 
+     *
      * @param bind
      *          elemento representando o bind a ser removido.
      * @return
      *          verdadeiro se o bind for removido.
      *
-     * @see ArrayList#remove
+     * @see TreeSet#remove
      */
     public boolean removeBind(B bind) {
         if(binds.remove(bind)){
@@ -235,7 +244,7 @@ public class NCLLink<L extends NCLLink, P extends NCLParam, B extends NCLBind, C
     
     /**
      * Verifica se o link possui um bind.
-     * 
+     *
      * @param bind
      *          elemento representando o bind a ser verificado.
      * @return
@@ -304,7 +313,15 @@ public class NCLLink<L extends NCLLink, P extends NCLParam, B extends NCLBind, C
         return content;
     }
 
-
+    /**
+     * Verifica se um um link qualquer é igual ao link atual.
+     *
+     * @param other
+     *      Link a que se deseja comparar o link atual
+     * @return
+     *  0, caso sejam iguais
+     *  !0, caso sejam diferentes
+     */
     public int compareTo(L other) {
         int comp = 0;
 
@@ -440,7 +457,11 @@ public class NCLLink<L extends NCLLink, P extends NCLParam, B extends NCLBind, C
         }
     }
 
-
+    /**
+     * Retorna os conectores existentes na base de conectores do documento.
+     * @return
+     *  objeto Iterable contendo os conectores.
+     */
     private Iterable<C> getConnectors() {
         NCLElement root = getParent();
 
@@ -464,7 +485,10 @@ public class NCLLink<L extends NCLLink, P extends NCLParam, B extends NCLBind, C
         return ((NCLDoc) root).getHead().getConnectorBase().getCausalConnectors();
     }
 
-
+    /**
+     * Verifica se o conector associado ao elo existe na base de conectores do
+     * documento. Caso nãop exista, adiciona uma advertencias a lista de advertencias.
+     */
     private void connectorReference() {
         //Search for the connector inside the base
         Iterable<C> connectors = getConnectors();

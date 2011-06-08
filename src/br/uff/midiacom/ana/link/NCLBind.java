@@ -58,8 +58,14 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>bind</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define um bind de um elo de um documento NCL.<br/>
+ * Este elemento define um bind (ligação) de um elo. Ele é responsável por especificar o papel da relação, através do seu atributo <i>role</i>,
+ * e a interface que exercerá o papel, dada pelos atributos <i>component</i>, que seleciona um objeto a ser relacionado e <i>interface</i>, que seleciona uma interface desse objeto.
+ * Um bind também pode possuir um parâmetro, elemento <i>bindParam</i>, que define características adicionais do relacionamento.<br/>
  *
+ * @see NCLRole
+ * @see NCLParam
+ *
+
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
  */
@@ -98,20 +104,20 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
 
     /**
      * Atribui um papel ao bind.
-     * 
+     *
      * @param role
-     *          elemento representando o papel ao qual o bind será associado.
+     *          Objeto do tipo role representando o papel ao qual o bind será associado.
      */
     public void setRole(R role) {
         this.role = role;
     }
     
     
-    /**
+     /**
      * Retorna o papel relacionado ao bind.
-     * 
+     *
      * @return
-     *          elemento representando o papel ao qual o bind será associado.
+     *           Objeto do tipo role representando o papel ao qual o bind foi associado.
      */
     public R getRole() {
         return role;
@@ -119,10 +125,10 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
     
     
     /**
-     * Atribui um nó ao bind.
-     * 
+     * Atribui um nó ao elemento <i>component</i> do bind.
+     *
      * @param component
-     *          elemento representando o nó mapeado pelo bind.
+     *          Objeto representando o nó a ser mapeado pelo bind.
      */
     public void setComponent(N component) {
         this.component = component;
@@ -130,10 +136,10 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
     
     
     /**
-     * Retorna o nó atribuído ao bind.
-     * 
+     * Retorna o nó atribuído ao elemento <i>component</i> do bind.
+     *
      * @return
-     *          elemento representando o nó mapeado pelo bind.
+     *           Objeto representando o nó mapeado pelo bind.
      */
     public N getComponent() {
         return component;
@@ -141,10 +147,10 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
     
     
     /**
-     * Determina a interface do nó atribuído ao bind.
-     * 
+     * Determina a interface do nó atribuído ao bind que participará do relacionamento.
+     *
      * @param interfac
-     *          elemento representando a interface do nó.
+     *          Objeto representando a interface do nó a ser atribuida.
      */
     public void setInterface(I interfac) {
         this.interfac = interfac;
@@ -152,21 +158,22 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
     
     
     /**
-     * Retorna a interface do nó atribuído ao bind.
-     * 
+     * Retorna a interface do nó atribuído ao bind que participará do relacionamento.
+     *
      * @return
-     *          elemento representando a interface do nó.
+     *          Objeto representando a interface do nó.
      */
     public I getInterface() {
         return interfac;
     }
     
     
+
     /**
      * Atribui um descritor ao bind.
-     * 
+     *
      * @param descriptor
-     *          elemento representando o descritor a ser atribuido.
+     *          Objeto representando o descritor a ser atribuido.
      */
     public void setDescriptor(D descriptor) {
         this.descriptor = descriptor;
@@ -175,9 +182,9 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
     
     /**
      * Retorna o descritor atribuido ao bind.
-     * 
+     *
      * @return
-     *          elemento representando o descritor a ser atribuido.
+     *          Objeto representando o descritor a ser atribuido.
      */
     public D getDescriptor() {
         return descriptor;
@@ -185,10 +192,10 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
     
     
     /**
-     * Adiciona um parâmetro ao bind.
+     * Adiciona um parâmetro ao bind.Este parâmetro representa um par atributo-valor que informa ao elo uma característica adicional do relacionamento.
      *
      * @param param
-     *          elemento representando o parâmetro a ser adicionado.
+     *          Objeto representando o parâmetro a ser adicionado.
      * @return
      *          verdadeiro se o parâmetro foi adicionado.
      *
@@ -210,7 +217,7 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
      * Remove um parâmetro do bind.
      *
      * @param param
-     *          elemento representando o parâmetro a ser removido.
+     *          Objeto representando o parâmetro a ser removido.
      * @return
      *          verdadeiro se o parâmetro foi removido.
      *
@@ -232,7 +239,7 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
      * Verifica se o bind possui um parâmetro.
      *
      * @param param
-     *          elemento representando o parâmetro a ser verificado.
+     *          Objeto representando o parâmetro a ser verificado.
      * @return
      *          verdadeiro se o parâmetro existir.
      */
@@ -241,7 +248,7 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
     }
 
 
-    /**
+   /**
      * Verifica se o bind possui algum parâmetro.
      *
      * @return
@@ -301,7 +308,14 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
         return content;
     }
     
-    
+    /**
+     * Compara o bind atual a um outro bind.
+     * @param other
+     * Bind que se deseja comparar ao atual
+     * @return
+     *  0, se os binds forem iguais
+     *  -1, se os binds forem diferentes
+     */
     public int compareTo(B other) {
         int comp = 0;
 
@@ -497,7 +511,13 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
         }
     }
 
-
+    /**
+     * Verifica se o role adicionado ao bind existe no conector utilizado pelo link.
+     *
+     * @return
+     *  verdadeiro se o papel  e o conector correspondente existirem
+     *  false caso não exista o papel e/ou o concetor.
+     */
     private boolean roleReference() {
         //Search for the role inside the connector
         if(((NCLLink) getParent()).getXconnector() == null){
@@ -526,7 +546,18 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
         return false;
     }
 
-
+    /**
+     * Dada a condição de um conector (seja ela simples ou composta),
+     * verifica se o role atribuido ao bind atual está contido
+     * nesta condição. Caso não exista, uma advertencia será adicionada a lista de
+     * advertencias.
+     *
+     * @param cond
+     *  Condição em que o papel será procurado.
+     *
+     * @return
+     *  o papel, caso exista.
+     */
     private R findRole(NCLCondition cond) {
         if(cond instanceof NCLSimpleCondition){
             if(((NCLSimpleCondition) cond).getRole().getName().equals(getRole().getName()))
@@ -551,6 +582,17 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
         return null;
     }
 
+    /**
+     * Dada uma assertiva (seja ela simples ou composta), verifica se o role
+     * atribuido ao bind atual está contido nesta assertiva.Caso não exista, uma
+     * advertencia será adicionada a lista de advertencias.
+     *
+     * @param cond
+     *  Assertiva em que o papel será procurado.
+     *
+     * @return
+     *  o papel, caso exista.
+     */
 
     private R findRole(NCLStatement stat) {
         if(stat instanceof NCLAssessmentStatement){
@@ -573,7 +615,18 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
         return null;
     }
 
-
+    /**
+     * Dada a ação de um conector (seja ela simples ou composta),
+     * verifica se o role atribuido ao bind atual está contido
+     * nesta ação. Caso não exista, uma advertencia será adicionada a lista de
+     * advertencias.
+     *
+     * @param cond
+     *  Ação em que o papel será procurado.
+     *
+     * @return
+     *  o papel, caso exista.
+     */
     private R findRole(NCLAction act) {
         if(act instanceof NCLSimpleAction){
             if(((NCLSimpleAction) act).getRole().getName().equals(getRole().getName()))
@@ -592,7 +645,10 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
         return null;
     }
 
-
+    /**
+     * Verifica se o nó atribuído como component do bind existe no documento. Caso
+     * não exista, uma advertência é adicionada  lista de advertências.
+     */
     private void componentReference() {
         //Search for a component node in its parent
         if(getParent().getParent() == null){
@@ -616,7 +672,10 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
         addWarning("Could not find role in node with id: " + getComponent().getId());
     }
 
-
+    /**
+     * Verifica se a interface associada ao bind existe no component especificado.
+     * Caso não exista, uma advertencia é adicionada a lista de advertencias.
+     */
     private void interfaceReference() {
         //Search for the interface inside the node
         Iterable<I> ifaces;
@@ -665,7 +724,12 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
         addWarning("Could not find interface with id: " + getInterface().getId());
     }
 
-
+    /**
+     * Retorna os descritores presentes nas base de descritores do documento.
+     *
+     * @return
+     *  Objeto Iterable contendo os descritores do documento.
+     */
     private Iterable<D> getDescriptors() {
         NCLElement root = getParent();
 
@@ -689,7 +753,11 @@ public class NCLBind<B extends NCLBind, R extends NCLRole, N extends NCLNode, I 
         return ((NCLDoc) root).getHead().getDescriptorBase().getDescriptors();
     }
 
-
+    /**
+     * Verfifica se o descritor associado ao bind existe na base de descritores
+     * do documento. Caso não exista, uma advertência será adicionada a lista de
+     * advertencias.
+     */
     private void descriptorReference() {
         //Search for the descriptor inside the node
         Iterable<D> descriptors = getDescriptors();

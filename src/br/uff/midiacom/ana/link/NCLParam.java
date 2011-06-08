@@ -47,7 +47,12 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define um parâmetro interno a um elemento <i>link</i> ou <i>bind</i>
- * da <i>Nested Context Language</i> (NCL).<br/>
+ * da <i>Nested Context Language</i> (NCL). Possui dois atributos, <i>name</i> e <i>value</i>. O atributo name representa o nome do parâmetro
+ * e faz referência ao nome do parâmetro do conector, definido previamente pelo elemento <i>connectorParam</i>. O atributo value recebe o valor do parâmetro em questão.
+ * Caso o parâmetro seja definido como um parâmetro do elo (linkParam), seu valor é válido para qualquer bind pertencente ao elo. Caso seja definido como parâmetro
+ * do bind (bindParam), seu valor é válido apenas para o bind em que ele foi definido.<br/>
+ *
+ * @see NCLConnectorParam
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -62,12 +67,12 @@ public class NCLParam<P extends NCLParam, C extends NCLConnectorParam> extends N
     
     /**
      * Construtor do parâmetro interno a um elemento <i>link</i> ou <i>bind</i>.
-     * 
+     *
      * @param paramType
-     *          define se o parâmetro é de um elemento <i>link</i> ou <i>bind</i>.
+     *          define se o parâmetro é de um elemento <i>linkParam</i> ou <i>bindParam</i>.
      *
      * @throws java.lang.NullPointerException
-     *          se o tipo for nulo.
+     *          se o parâmetro for nulo.
      */
     public NCLParam(NCLParamInstance paramType) throws NullPointerException {
         if(paramType == null)
@@ -103,19 +108,18 @@ public class NCLParam<P extends NCLParam, C extends NCLConnectorParam> extends N
     
     
     /**
-     * Attribui um <i>connectorParam</i> ao parâmetro.
-     * 
+     * Associa o parâmetro, relacionado ao elo, a um parâmetro definido pelo conector (<i>connectorParam</i>(.
+     *
      * @param connectorParam
-     *          elemento representando o parâmetro do conector ao qual este parâmetro se refere.
+     *          Objeto representando o parâmetro do conector ao qual este parâmetro se refere.
      */
     public void setName(C connectorParam) {
         this.name = connectorParam;
     }
     
-    
     /**
-     * Retorna o <i>connectorParam</i> do parâmetro.
-     * 
+     * Retorna o <i>connectorParam</i> ao qual o parâmetro se refere.
+     *
      * @return NCLConnectorParam representando o nome do parâmetro.
      */
     public C getName() {
@@ -123,9 +127,9 @@ public class NCLParam<P extends NCLParam, C extends NCLConnectorParam> extends N
     }
     
     
-    /**
+   /**
      * Determina o valor do atributo value do parâmetro.
-     * 
+     *
      * @param value
      *          String contendo o valor a ser atribuído ao parâmetro.
      *
@@ -139,10 +143,9 @@ public class NCLParam<P extends NCLParam, C extends NCLConnectorParam> extends N
         this.value = value;
     }
     
-    
     /**
      * Retorna o valor do atributo value do parâmetro.
-     * 
+     *
      * @return
      *          String contendo o valor atribuído ao parâmetro.
      */
@@ -150,7 +153,11 @@ public class NCLParam<P extends NCLParam, C extends NCLConnectorParam> extends N
         return value;
     }
 
-
+    /**
+    * Retorna o tipo do parâmetro, se um parâmetro do elo (linkParam) ou da ligação (bindParam).
+    * @return
+    *      Objeto do tipo <i>NCLParamInstance</i> representando o tipo do parâmetro.
+    */
     public NCLParamInstance getType() {
         return paramType;
     }
@@ -179,7 +186,14 @@ public class NCLParam<P extends NCLParam, C extends NCLConnectorParam> extends N
         return content;
     }
     
-    
+    /**
+     * Compara o parâmetro atual a um outro parâmetro qualquer.
+     * @param other
+     * parâmetro ao qual se deseja comparar o atual.
+     * @return
+     * 0, se forem iguais
+     * 1 ou -1, caso sejam diferentes
+     */
     public int compareTo(P other) {
         return getName().compareTo(other.getName());
     }
@@ -240,7 +254,11 @@ public class NCLParam<P extends NCLParam, C extends NCLConnectorParam> extends N
             nameReference();
     }
 
-
+    /**
+     * Verifica se o parâmetro está definido ou no link, ou no conector, segundo o seu tipo.
+     * Caso não exista o parametro, o link ou o conector uma advertencia é adicionada
+     * a lista de advertencias.
+     */
     private void nameReference() {
         //Search for the connector parameter inside the connector
         NCLElement link = getParent();
