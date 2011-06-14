@@ -44,7 +44,8 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>meta</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define um metadado para o documento NCL.<br/>
+ * Este elemento  define um metadado para o documento NCL. Destinado a metadados mais simples, <i>meta</i> possui, a exemplo de um elemento <i>property</i>,
+ * um atributo name (representando que tipo de informação o elemento contém) e um atributo content (a informação propriamente dita).<br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -154,7 +155,15 @@ public class NCLMeta<M extends NCLMeta> extends NCLElement implements Comparable
         return content;
     }
 
-
+    /**
+     * Compara o metadado atual com um outro qualquer através do seu aributo name.
+     *
+     * @param other
+     *      Metadado ao qual se deseja comparar o atual.
+     * @return
+     *  Retorna o inteiro 0 caso os metadados sejam iguais.
+     *  Retorna um inteiro diferente de zero caso os metadados sejam diferentes.
+     */
     public int compareTo(M other) {
         return getName().compareTo(other.getName());
     }

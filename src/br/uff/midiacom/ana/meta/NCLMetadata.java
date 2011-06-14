@@ -44,8 +44,8 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>metadata</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define uma árvore RDF de metadados para o documento NCL.<br/>
- *
+ * Este elemento também engloba metadados, porém na forma de uma árvora uma árvore RDF , onde o elemento <i>metadata</i><br/>
+ * atua como raiz da árvore.
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
  */
@@ -124,6 +124,15 @@ public class NCLMetadata<M extends NCLMetadata> extends NCLElement implements Co
         return content;
     }
 
+    /**
+     * Compara a arvore RDF do elemento metadata atual com a arvore de um outro
+     * elemento metadata.
+     * @param other
+     *   Elemento ao qual se deseja comparar o elemento atual.
+     * @return
+     *  Retorna o inteiro 0 caso os elementos comparados sejam iguais.
+     *  Retorna diferente de zer caso sejam diferentes.
+     */
 
     public int compareTo(M other) {
         return getRDFTree().compareTo(other.getRDFTree());
