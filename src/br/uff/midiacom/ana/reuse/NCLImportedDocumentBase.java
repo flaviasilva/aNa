@@ -48,7 +48,10 @@ import org.xml.sax.XMLReader;
 
 
 /**
- * Esta classe define uma base de documentos importados da <i>Nested Context Language</i> (NCL).<br/>
+ * Esta classe define uma base de documentos importados da <i>Nested Context Language</i> (NCL).
+ * Isto é, seus elementos filhos são importações de documentos NCL inteiros, realizadas
+ * através de elementos <i>importNCL</i>. Esses documentos importados, poderão ser utilizados
+ * pelo documento atual como qualquer outro nó de conteúdo.<br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>

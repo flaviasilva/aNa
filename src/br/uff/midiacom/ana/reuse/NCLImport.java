@@ -49,7 +49,20 @@ import org.xml.sax.XMLReader;
 
 
 /**
- * Esta classe define o elemento de importação da <i>Nested Context Language</i> (NCL).<br/>
+ * Esta classe define o elemento de importação da <i>Nested Context Language</i> (NCL).
+ * O elemento importador permite a reutilização de elementos previamente definidos em outros
+ * documentos, aumentando a eficiência do processo de autoria.
+ * O campo <i>type</i> da classe determina se o importador e do tipo <i>importNCL</i>
+ * ou <i>importBase</i>.
+ *
+ * O elemento <i>importNCL</i> permite a reutilização de um documento NCL completo. Na aplicação
+ * que o reutiliza, ele é visto como qualquer outro nó de conteúdo a ser apresentado
+ * numa região definida por um descritor. Elementos<i>importNCL</i> são definidos
+ * dentro de uma base específica, presente no cabeçalho: a <i>importedDocumentBase</i>.
+ *
+ * O elemento <i>importBase</i> permite a reutilização de bases (de regiões, descritores,
+ * conectores, etc) definidas em outro documento. Portanto, o elemento <i>importBase</i>
+ * é definido como elemento filho da base correspondente a importação realizada. <br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -65,10 +78,10 @@ public class NCLImport<I extends NCLImport, R extends NCLRegion> extends NCLElem
 
     /**
      * Construtor do elemento de importação.
-     * 
+     *
      * @param type
      *          tipo do elemento, importBase ou importNCL.
-     * 
+     *
      * @throws java.lang.NullPointerException
      *          se o tipo for nulo.
      */
@@ -106,7 +119,7 @@ public class NCLImport<I extends NCLImport, R extends NCLRegion> extends NCLElem
 
 
     /**
-     * Atribui um alias ao elemento de importação.
+     * Atribui um apelido (atributo alias) ao elemento de importação.
      *
      * @param alias
      *          String representando o alias.
@@ -117,7 +130,7 @@ public class NCLImport<I extends NCLImport, R extends NCLRegion> extends NCLElem
 
 
     /**
-     * Retorna o alias do elemento de importação.
+     * Retorna o apelido (atributo alias) do elemento de importação.
      *
      * @return
      *          String representando o alias.
@@ -128,13 +141,13 @@ public class NCLImport<I extends NCLImport, R extends NCLRegion> extends NCLElem
 
 
     /**
-     * Atribui o endereço do documento sendo importado.
+     * Atribui o endereço do documento a ser importado.
      *
      * @param documentURI
      *          String representando o endereço.
      *
      * @throws java.net.URISyntaxException
-     *          se o endereço não for válido.
+     *          Dispara uma exceção caso o endereço não seja válido.
      *
      * @see java.net.URI
      */
@@ -147,7 +160,7 @@ public class NCLImport<I extends NCLImport, R extends NCLRegion> extends NCLElem
 
 
     /**
-     * Retorna o endereço do documento sendo importado.
+     * Retorna o endereço do documento a ser importado.
      *
      * @return
      *          String representando o endereço.
@@ -202,7 +215,15 @@ public class NCLImport<I extends NCLImport, R extends NCLRegion> extends NCLElem
         return content;
     }
 
-
+    /**
+     * Compara o importador atual a outro importador qualquer, através do atributo
+     * alias.
+     * @param other
+     *      Importador que se deseja comparar ao atual.
+     * @return
+     *      Retorna 0, caso os importadores sejam iguais.
+     *      Retorna um inteiro diferente de 0, caso os importadores sejam diferentes.
+     */
     public int compareTo(I other) {
         return getAlias().compareTo(other.getAlias());
     }
@@ -277,7 +298,12 @@ public class NCLImport<I extends NCLImport, R extends NCLRegion> extends NCLElem
             regionReference();
     }
 
-
+    /**
+     * Verifica se a região associada ao importador atual existe na base de regiões
+     * do documento. Caso não existam o cabeçalho do documento, uma base de regiões
+     * ou a propria região que se busca, uma advertencia erá adicionada a lista
+     * de advertencias.
+     */
     private void regionReference() {
         //Search for the interface inside the node
         NCLElement head = getParent();
@@ -297,7 +323,17 @@ public class NCLImport<I extends NCLImport, R extends NCLRegion> extends NCLElem
         setRegion(findRegion(((NCLHead) head).getRegionBase().getRegions()));
     }
 
-
+    /**
+     * Dado um conjunto de regiões, verifica se a região associada ao importador
+     * atual existe nesse conjunto. Caso a região exista, ela é retornada pelo
+     * método. Caso contrário, uma advertencia é adicionada a lista de advertências
+     * e o metodo retorna null.
+     * @param regions
+     *      Conjunto no qual se deseja pesquisar a região associada ao importador.
+     * @return
+     *      A região, caso ela pertença ao conjunto. Null, caso ela não pertença
+     * ao conjunto.
+     */
     private R findRegion(Iterable<R> regions) {
         for(R reg : regions){
             if(reg.hasRegion()){
