@@ -49,22 +49,36 @@ import org.xml.sax.XMLReader;
 /**
  * Esta classe define o elemento <i>region</i> da <i>Nested Context Language</i> (NCL).<br/>
  *
- * Regions definem as regioes da tela dos dispositivos de saida onde os nos de midia poderao ser exibidos. Uma regiao pode ser definida
- * com relaco a area total associada aop dispositivo correspondente a uma base de regioes, ou aninhada a uma outra região, recursivamente.<br/>
+ * Regions definem as regioes da tela dos dispositivos de saida onde os nos de 
+ * midia poderao ser exibidos. Uma regiao pode ser definida com relaco a area total
+ * associada aop dispositivo correspondente a uma base de regioes, ou aninhada a
+ * uma outra região, recursivamente.<br/>
  *
- * Os atributos de região definem suas coordenadas espacias e podem ser definidos em numeros absolutos, representando a quantidade de pixels,
- * ou em porcentagem, relativa a região pai. São eles:<br/>
- * <i>left</i> - coordenada x tomando como origem a extremidade esquerda da tela,com relação a area total do dispositivo ou (no caso da regiao estar aninhada) com a cordenada x esquerda da região pai.
- * <i>top</i> - coordenada y tomando como origem a extremidade superior da tela, com relação a area total ou a coordenada y superior da regiao pai.
- * <i>right</i> - semelhante ao atributo <i>left</i>, mas com a origem do eixo localizada na fronteira direita da tela.
- * <i>bottom</i> - semelhante ao atributo <i>top</i>, mas tendo a origem do eixo localizada na fronteira inferior da tela.
- * <i>width</i> - dimensão horizontal da região, podendo ser expressa em pixels ou em porcentagem, relativa a regiao pai.
- * <i>height</i> - dimensão vertical da regiao, podendo ser expressa em pixels ou em porcentagem, relativa a pai.
- * <i>zIndex</i> - Coordenada z, tomando como o origem o plano da tela e crescente no sentido "para fora da tela". Esta coordenada serve para definir o critério de sobreposição de midias que
- * ocupem espaços coincidente na tela do dispositivo de saída. Quanto maior o valor do <i>zIndex</i>, maior a prioridade na sobreposição.<br/>
+ * Os atributos de região definem suas coordenadas espacias e podem ser definidos 
+ * em numeros absolutos, representando a quantidade de pixels, ou em porcentagem,
+ * relativa a região pai. São eles:<br/>
+ *
+ * <i>left</i> - coordenada x tomando como origem a extremidade esquerda da tela,
+ * com relação a area total do dispositivo ou (no caso da regiao estar aninhada)
+ * com a cordenada x esquerda da região pai.
+ * <i>top</i> - coordenada y tomando como origem a extremidade superior da tela,
+ * com relação a area total ou a coordenada y superior da regiao pai.
+ * <i>right</i> - semelhante ao atributo <i>left</i>, mas com a origem do eixo
+ * localizada na fronteira direita da tela.
+ * <i>bottom</i> - semelhante ao atributo <i>top</i>, mas tendo a origem do eixo
+ * na fronteira inferior da tela.
+ * <i>width</i> - dimensão horizontal da região, podendo ser expressa em pixels
+ * ou em porcentagem, relativa a regiao pai.
+ * <i>height</i> - dimensão vertical da regiao, podendo ser expressa em pixels
+ * ou em porcentagem, relativa a pai.
+ * <i>zIndex</i> - Coordenada z, tomando como o origem o plano da tela e crescente
+ * no sentido "para fora da tela". Esta coordenada serve para definir o critério
+ * de sobreposição de midias que ocupem espaços coincidente na tela do dispositivo
+ * de saída. Quanto maior o valor do <i>zIndex</i>, maior a prioridade na
+ * sobreposição.<br/>
  *
  * 
- * @see br.pensario.region.NCLRegionBase
+ *
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -156,9 +170,11 @@ public class NCLRegion<R extends NCLRegion> extends NCLIdentifiableElement imple
      * @param left
      *          inteiro representando a posição a esquerda da região.
      * @param relative
-     *          booleano indicando se o valor de posição é uma porcentagem.
+     *          booleano indicando se o valor de posição é uma porcentagem relativa
+     * a uma região pai.
      * @throws java.lang.IllegalArgumentException
-     *          se a posição for uma porcentagem e seu valor estiver fora do intervalo [0,100]
+     *          se a posição for uma porcentagem e seu valor estiver fora do
+     * intervalo [0,100]
      */
     public void setLeft(Integer left, boolean relative) throws IllegalArgumentException {
         setRelativeLeft(relative);
@@ -699,7 +715,14 @@ public class NCLRegion<R extends NCLRegion> extends NCLIdentifiableElement imple
         return content;
     }
 
-
+    /**
+     * Compara a região atual a uma outra, através do identificador.
+     * @param other
+     *      região a qual se deseja comparar a atual.
+     * @return
+     *      Retorna 0, caso as regiões sejam iguais.
+     *      Retorno diferente de zero caso as regiões sejam diferentes.
+     */
     public int compareTo(R other) {
         return getId().compareTo(other.getId());
     }
