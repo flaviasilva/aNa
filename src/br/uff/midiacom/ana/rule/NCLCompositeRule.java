@@ -48,8 +48,14 @@ import org.xml.sax.XMLReader;
 
 
 /**
- * Esta classe define uma regra de teste composta da <i>Nested Context Language</i> (NCL).<br/>
- *
+ * Esta classe define uma regra de teste composta da <i>Nested Context Language</i>.
+ * Possui como elementos filhos regras simples (elementos rule). Seus atributos
+ * são um identificador e um atributo <i>operator</i>, que define se todas as
+ * regras simples devem ser avaliadas como verdadeira para que a regra composta
+ * também o seja (valor do operador "and") ou se basta que uma das regras simples
+ * seja avaliada verdadeira para que a regra composta que a contém seja verdadeira
+ * (valor do operador "or").
+ * <br/>
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
  */
@@ -93,7 +99,7 @@ public class NCLCompositeRule<T extends NCLTestRule> extends NCLIdentifiableElem
 
 
     /**
-     * Atribui um operador a regra composta.
+     * Atribui um operador a regra composta. Os valores possíveis são "and" e "or".
      *
      * @param operator
      *          elemento representando o operador da regra composta.
@@ -115,7 +121,7 @@ public class NCLCompositeRule<T extends NCLTestRule> extends NCLIdentifiableElem
 
 
     /**
-     * Adiciona uma regra a regra composta.
+     * Adiciona uma regra simples (elemento <i>rule</i>) a regra composta.
      *
      * @param rule
      *          elemento representando a regra a ser adicionada.
@@ -159,7 +165,8 @@ public class NCLCompositeRule<T extends NCLTestRule> extends NCLIdentifiableElem
 
 
     /**
-     * Verifica se a regra composta possui uma regra.
+     * Verifica se a regra composta possui uma regra. Faz a busca a partir de uma
+     * referencia a regra que se deseja verificar.
      *
      * @param rule
      *          elemento representando a regra a ser verificada.
@@ -223,7 +230,15 @@ public class NCLCompositeRule<T extends NCLTestRule> extends NCLIdentifiableElem
         return content;
     }
 
-
+    /**
+     * Compara a regra composta atual a uma outra regra qualquer, através do
+     * identificador.
+     * @param other
+     *      Regra a qual se deseja comparar a atual.
+     * @return
+     *      Retorna 0, caso as regras sejam iguais.
+     *      Rettorna um inteiro diferente de 0, caso sejam diferentes.
+     */
     public int compareTo(T other) {
         return getId().compareTo(other.getId());
     }

@@ -41,7 +41,11 @@ import br.uff.midiacom.ana.IdentifiableElement;
 
 
 /**
- * Esta classe define uma regra de teste da <i>Nested Context Language</i> (NCL).<br/>
+ * Esta interface define uma regra de teste da <i>Nested Context Language</i> (NCL).
+ * As classes que implementam essa interface são <i>NCLRule</i> e <i>NCLCompositeRule</i>.<br/>
+ *
+ * @see br.uff.midiacom.ana.rule.NCLRule
+ * @see br.uff.midiacom.ana.rule.NCLCompositeRule
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>

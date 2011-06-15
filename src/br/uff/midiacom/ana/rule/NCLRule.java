@@ -53,7 +53,15 @@ import org.xml.sax.XMLReader;
 
 
 /**
- * Esta classe define uma regra de teste da <i>Nested Context Language</i> (NCL).<br/>
+ * Esta classe define uma regra de teste da <i>Nested Context Language</i> (NCL).
+ * Uma regra de teste, elemento <i>rule</i>, possui: um atributo <i>var</i>,
+ * especificando a variavel a ser testada; um atributo <i>value</i> especificando
+ * o valor sobre o qual a variavel sera testada; um atributo <i>comparator</i>,
+ * que define o operador de comparação; e um identificador para a regra.
+ * Uma regra é avaliada como verdadeira se a comparação (definida em <i>operator</i>)
+ * entre o valor presente na variável referenciada (na verdade, um elemento
+ * <i>property</i> de um nó )por <i>var</i> e o valor especificado no atributo
+ * <i>value</i> retornar um valor verdadeiro <br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -95,7 +103,8 @@ public class NCLRule<P extends NCLProperty, T extends NCLTestRule> extends NCLId
 
 
     /**
-     * Atribui uma propriedade ao atributo var.
+     * Atribui uma propriedade ao atributo var. A propriedade do nó será testada
+     * como uma variavel e seu valor comparado ao valor presente no atributo value.
      *
      * @param var
      *          elemento representando a propriedade associada ao atributo.
@@ -106,7 +115,8 @@ public class NCLRule<P extends NCLProperty, T extends NCLTestRule> extends NCLId
 
 
     /**
-     * Retorna a propriedade relacionada ao atributo var.
+     * Retorna a propriedade relacionada ao atributo var. A propriedade do nó será testada
+     * como uma variavel e seu valor comparado ao valor presente no atributo value.
      *
      * @return
      *          elemento representando a propriedade associada ao atributo.
@@ -117,7 +127,9 @@ public class NCLRule<P extends NCLProperty, T extends NCLTestRule> extends NCLId
 
 
     /**
-     * Atribui um comparador a regra.
+     * Atribui um comparador lógico a regra.
+     *
+     * @see br.uff.midiacom.ana.NCLValues.NCLComparator
      *
      * @param comparator
      *          elemento representando o comparador da regra.
@@ -128,7 +140,9 @@ public class NCLRule<P extends NCLProperty, T extends NCLTestRule> extends NCLId
 
 
     /**
-     * Retorna o comparador da regra.
+     * Retorna o comparador lógico da regra.
+     *
+     *  @see br.uff.midiacom.ana.NCLValues.NCLComparator
      *
      * @return
      *          elemento representando o comparador da regra.
@@ -139,7 +153,8 @@ public class NCLRule<P extends NCLProperty, T extends NCLTestRule> extends NCLId
 
 
     /**
-     * Atribui um valor de comparação a regra.
+     * Atribui um valor de comparação a regra. Este valor será comparado ao valor presente
+     * na propriedade referenciada pelo atributo <i>var</i>.
      *
      * @param value
      *          String representando o valor de comparação.
@@ -156,7 +171,8 @@ public class NCLRule<P extends NCLProperty, T extends NCLTestRule> extends NCLId
 
 
     /**
-     * Retorna o valor de comparação da regra.
+     * Retorna o valor de comparação da regra. Este valor será comparado ao valor presente
+     * na propriedade referenciada pelo atributo <i>var</i>.
      *
      * @return
      *          String representando o valor de comparação.
@@ -193,7 +209,14 @@ public class NCLRule<P extends NCLProperty, T extends NCLTestRule> extends NCLId
         return content;
     }
 
-
+    /**
+     * Compara a regra atual a uma outra qualquer, através dos identificadores.
+     * @param other
+     *      Regra a qual se deseja comparar a atual.
+     * @return
+     *      Retorna 0 caso as regras sejam iguais.
+     *      Retorna um inteiro diferente de zero, caso sejam diferentes.
+     */
     public int compareTo(T other) {
         return getId().compareTo(other.getId());
     }
@@ -274,7 +297,13 @@ public class NCLRule<P extends NCLProperty, T extends NCLTestRule> extends NCLId
             propertyReference();
     }
 
-
+    /**
+     * Verifica se a propriedade associada a regra atual existe no documento. Faz
+     * a busca dentre todas as propriedades de todos os nós presentes no corpo do
+     * documento NCL. Caso não encontre  o documento NCL, o elemento body ou a
+     * propriedae em questão, advertências serão adicionadas a lista de advertências.
+     *
+     */
     private void propertyReference() {
         //Search for the interface inside the node
         NCLElement doc = getParent();
@@ -294,7 +323,16 @@ public class NCLRule<P extends NCLProperty, T extends NCLTestRule> extends NCLId
         setVar(findProperty(((NCLDoc) doc).getBody().getNodes()));
     }
 
-
+    /**
+     * Dado um conjunto de propriedades, verifica se a propriedade associada a regra
+     * atual existe nesse conjunto. Caso exista, retorna a propriedade verificada.
+     * Caso contrário, adiciona uma advertência a lista de advertencias e retorna null.
+     * @param nodes
+     *      Conjunto em que se deseja pesquisar a propriedade em questão.
+     * @return
+     *      A propriedade, caso ela seja encontrada.
+     *      Null, caso ela não exista no conjunto.
+     */
     private P findProperty(Iterable<NCLNode> nodes) {
         for(NCLNode n : nodes){
             if(n instanceof NCLMedia){

@@ -49,7 +49,10 @@ import org.xml.sax.XMLReader;
 
 
 /**
- * Esta classe define uma base de regras de teste da <i>Nested Context Language</i> (NCL).<br/>
+ * Esta classe define uma base de regras de teste da <i>Nested Context Language</i> (NCL).
+ * Uma base de regras, definida pelo elemento <i>ruleBase</i>, consiste numa
+ * coleção de regras de teste, que serão utilizadas na avaliação de condições
+ * destinadas a adaptação do conteúdo apresentado. <br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -127,7 +130,8 @@ public class NCLRuleBase<T extends NCLTestRule, I extends NCLImport> extends NCL
 
 
     /**
-     * Verifica se a base de regras possui uma regra.
+     * Verifica se a base de regras possui uma regra. Busca a partir de uma
+     * referência a regra que se deseja verificar.
      *
      * @param rule
      *          elemento representando a regra a ser verificada.
@@ -161,7 +165,7 @@ public class NCLRuleBase<T extends NCLTestRule, I extends NCLImport> extends NCL
     }
 
 
-    /**
+     /**
      * Adiciona um importador de base à base de regras.
      *
      * @param importBase
@@ -202,7 +206,8 @@ public class NCLRuleBase<T extends NCLTestRule, I extends NCLImport> extends NCL
 
 
     /**
-     * Verifica se a base de regras contém um importador de base.
+     * Verifica se a base de regras contém um importador de base. Busca a partir de um referência
+     * ao importador que se deseja verificar.
      *
      * @param importBase
      *          elemento representando o importador a ser verificado.
@@ -210,7 +215,6 @@ public class NCLRuleBase<T extends NCLTestRule, I extends NCLImport> extends NCL
     public boolean hasImportBase(I importBase) {
         return imports.contains(importBase);
     }
-
 
     /**
      * Verifica se a base de regras possui algum importador de base.
