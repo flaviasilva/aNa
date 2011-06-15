@@ -48,7 +48,9 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>bindRule</i> de um switch da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define um bind de um switch de um documento NCL.<br/>
+ * Este elemento  define um bind de um switch de um documento NCL. Ele faz a associação entre uma regra e o nó que será executado caso a regra
+ * seja avaliada como verdadeira. Possui os atributos: <i>rule</i>, que define a regra a ser avaliada;
+ * <i>constituent</i>, que define o nó relacionado a regra.<br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -147,7 +149,16 @@ public class NCLBindRule<B extends NCLBindRule, N extends NCLNode, R extends NCL
         return content;
     }
 
-
+    /**
+     * Compara o bindRule atual a um outro elemento bindRule. O método verifica se
+     * os dois bindRules possuem os mesmos atributos <i>rule</i> e <i>constituent</i>.
+     *
+     * @param other
+     *      BindRule que se deseja comparar ao bindRule atual.
+     * @return
+     *      Retorna 0 caso os bindRules sejam iguais.
+     *      Retorna -1 caso sejam diferentes.
+     */
     public int compareTo(B other) {
         int comp = 0;
 
@@ -223,7 +234,11 @@ public class NCLBindRule<B extends NCLBindRule, N extends NCLNode, R extends NCL
             ruleReference();
     }
 
-
+    /**
+     * Retorna o conjunto de regras contido na base de regras do documento.
+     * @return
+     *      objeto Iterable contendo as regras da base.
+     */
     private Iterable<R> getRules() {
         NCLElement root = getParent();
 
@@ -247,7 +262,11 @@ public class NCLBindRule<B extends NCLBindRule, N extends NCLNode, R extends NCL
         return ((NCLDoc) root).getHead().getRuleBase().getRules();
     }
 
-
+    /**
+     * Verifica se o nó associado ao elemento constituent existe dentro do elemento
+     * switch ao qual pertence o bindRole atual. Caso não exista, adiciona uma advertência
+     * a lista de advertências.
+     */
     private void constituentReference() {
         //Search for a component node in its parent
         Iterable<N> nodes = ((NCLSwitch) getParent()).getNodes();
@@ -262,7 +281,10 @@ public class NCLBindRule<B extends NCLBindRule, N extends NCLNode, R extends NCL
         addWarning("Could not find node in switch with id: " + getConstituent().getId());
     }
 
-
+    /**
+     * Verifica se a regra associada ao bindRule existe na base de regras do documento.
+     * Caso não exista, adiciona uma advertência a lista de advertências.
+     */
     private void ruleReference() {
         //Search for the interface inside the node
         Iterable<R> rules = getRules();

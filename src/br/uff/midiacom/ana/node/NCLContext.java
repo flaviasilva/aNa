@@ -54,7 +54,9 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>context</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define um contexto de um documento NCL.<br/>
+ * Este elemento é o elemento que define um contexto de um documento NCL. Um contexto encapsula os objetos e os elos que contém, favorecendo uma estruturação mais independente do documento e o reúso das  mídias
+ * e relacionamentos contidos nele. O elemento <i>body</i> é um caso particular de contexto, que representa a aplicação como um todo.
+ * Um contexto pode aninhar outros contextos ou switches, mas não pode conter recursivamente a si mesmo. Contextos também podem ser reutilizados, quando um contexto referencia outros através do elemento refer.<br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -105,7 +107,7 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
 
 
     /**
-     * Atribui um contexto para ser reutilizado pelo contexto.
+     * Atribui um contexto ao atributo refer, para ser reutilizado pelo contexto atual.
      *
      * @param refer
      *          elemento representando o contexto a ser reutilizado.
@@ -116,7 +118,7 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
 
 
     /**
-     * Retorna o contexto reutilizado pelo contexto.
+     * Retorna o contexto associado ao atributo refer do contexto atual.     *Retorna a mídia associada ao atributo refer da mídia atual.
      *
      * @return
      *          elemento representando o contexto a ser reutilizado.
@@ -149,7 +151,7 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
 
 
     /**
-     * Remove uma porta do contexto.
+     * Remove uma porta do contexto a partir do seu identificador.
      *
      * @param id
      *          identificador da porta a ser removida.
@@ -168,10 +170,10 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
 
 
     /**
-     * Remove uma porta do contexto.
+     * Remove uma porta do contexto a partir de uma referência a porta.
      *
      * @param port
-     *          elemento representando a porta a ser removida.
+     *         Objeto representando a porta a ser removida.
      * @return
      *          Verdadeiro se a porta foi removida.
      *
@@ -190,10 +192,10 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
 
 
     /**
-     * Verifica se o contexto possui uma porta.
+     * Verifica se o contexto possui uma porta. Faz a busca a partir do identificador.
      *
      * @param id
-     *          identificador da porta a ser verificada.
+     *         string representando o identificador da porta a ser verificada.
      * @return
      *          verdadeiro se a porta existir.
      */
@@ -207,10 +209,10 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
 
 
     /**
-     * Verifica se o contexto possui uma porta.
+     * Verifica se o contexto possui uma porta. faz a busca a partir de uma referência a porta.
      *
      * @param port
-     *          elemento representando a porta a ser verificada.
+     *          Objeto representando a porta a ser verificada.
      * @return
      *          verdadeiro se a porta existir.
      */
@@ -245,7 +247,7 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
      * Adiciona uma propriedade ao contexto.
      *
      * @param property
-     *          elemento representando a propriedade a ser adicionada.
+     *          objeto representando a propriedade a ser adicionada.
      * @return
      *          Verdadeiro se a propriedade foi adicionada.
      *
@@ -264,10 +266,10 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
 
 
     /**
-     * Remove uma propriedade do contexto.
+     * Remove uma propriedade do contexto a partir do nome da propriedade.
      *
      * @param name
-     *          nome da propriedade a ser removida.
+     *          string representando o nome da propriedade a ser removida.
      * @return
      *          Verdadeiro se a propriedade foi removida.
      *
@@ -283,7 +285,7 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
 
 
     /**
-     * Remove uma propriedade do contexto.
+     * Remove uma propriedade do contexto a partir de uma referencia a propriedade.
      *
      * @param property
      *          elemento representando a propriedade a ser removida.
@@ -305,10 +307,10 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
 
 
     /**
-     * Verifica se o contexto possui uma propriedade.
+     * Verifica se o contexto possui uma propriedade. Busca pelo nome da propriedade.
      *
      * @param name
-     *          nome da propriedade a ser verificada.
+     *          String representando o nome da propriedade a ser verificada.
      * @return
      *          verdadeiro se a propriedade existir.
      */
@@ -322,7 +324,8 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
 
 
     /**
-     * Verifica se o contexto possui uma propriedade.
+     * Verifica se o contexto possui uma propriedade. Busca a partir de uma
+     * referencia a propriedade a ser verificada.
      *
      * @param property
      *          elemento representando a propriedade a ser verificada.
@@ -357,7 +360,8 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
 
 
     /**
-     * Adiciona um nó ao contexto.
+     * Adiciona um nó ao contexto. Estes podem ser do tipo <i>media</i>, <i>switch</i>,
+     * ou até mesmo um outro <i>context</i>.
      *
      * @param node
      *          elemento representando o nó a ser adicionado.
@@ -379,7 +383,7 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
 
 
     /**
-     * Remove um nó do contexto.
+     * Remove um nó do contexto a partir do seu id.
      *
      * @param id
      *          identificador do nó a ser removido.
@@ -397,8 +401,8 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
     }
 
 
-    /**
-     * Remove um nó do contexto.
+   /**
+     * Remove um nó do contexto a partir de uma referencia a ele.
      *
      * @param node
      *          elemento representando um nó a ser removido.
@@ -420,10 +424,10 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
 
 
     /**
-     * Verifica se o contexto possui um nó.
+     * Verifica se o contexto possui um nó. Faz a busca a partir do identificador do nó.
      *
      * @param id
-     *          identificador do nó a ser verificado.
+     *          String repreentando o identificador do nó a ser verificado.
      * @return
      *          verdadeiro se o nó existir.
      */
@@ -437,7 +441,7 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
 
 
     /**
-     * Verifica se o contexto possui um nó.
+     * Verifica se o contexto possui um nó. Faz a busca a partir de uma referência ao nó.
      *
      * @param node
      *          elemento representando o nó a ser verificado.
@@ -493,8 +497,8 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
     }
 
 
-    /**
-     * Remove um link do contexto.
+     /**
+     * Remove um link do contexto, a partir de uma referência ao link.
      *
      * @param link
      *          elemento representando o link a ser removido.
@@ -516,7 +520,7 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
 
 
     /**
-     * Verifica se o contexto possui um link.
+     * Verifica se o contexto possui um link. Busca a partir da referencia.
      *
      * @param link
      *          elemento representando o link a ser verificado.
@@ -539,7 +543,7 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
     }
 
 
-    /**
+     /**
      * Retorna os links do contexto.
      *
      * @return
@@ -600,7 +604,7 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
      * @param meta
      *          elemento representando o metadado a ser verificado.
      * @return
-     *          verdadeiro se o link existir.
+     *          verdadeiro se o metadado existir.
      */
     public boolean hasMeta(M meta) {
         return metas.contains(meta);
@@ -633,7 +637,7 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
      * Adiciona um metadado ao cabeçalho do documento NCL.
      *
      * @param metadata
-     *          elemento representando o metadado a ser adicionado.
+     *          Objeto representando a arvore RDF de metadados a ser adicionada.
      * @return
      *          Verdadeiro se o metadado foi adicionado.
      *
@@ -655,9 +659,9 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
      * Remove um metadado do cabeçalho do documento NCL.
      *
      * @param metadata
-     *          elemento representando o metadado a ser removido.
+     *          Objeto representando a arvore RDF de metadados a ser removida.
      * @return
-     *          Verdadeiro se o link foi removido.
+     *          Verdadeiro se o metadado foi removido.
      *
      * @see TreeSet#remove
      */
@@ -679,7 +683,7 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
      * @param metadata
      *          elemento representando o metadado a ser verificado.
      * @return
-     *          verdadeiro se o link existir.
+     *          verdadeiro se o metadado existir.
      */
     public boolean hasMetadata(MT metadata) {
         return metadatas.contains(metadata);
@@ -706,7 +710,8 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
     public Iterable<MT> getMetadatas() {
         return metadatas;
     }
-    
+
+
     
     public String parse(int ident) {
         String space, content;
@@ -765,7 +770,15 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
         return content;
     }
 
-
+    /**
+     * Compara o contexto atual a um outro contexto através do identificador.
+     *
+     * @param other
+     *  Contexto ao qual se deseja compaar o atual.
+     * @return
+     *      Retorna 0, caso os contextos sejam iguais.
+     *      Retorna um inteiro diferente de zero, caso sejam diferentes.
+     */
     public int compareTo(N other) {
         return getId().compareTo(other.getId());
     }
@@ -945,6 +958,11 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
         }
     }
 
+    /**
+     * Verifica se um contexto referenciado (cujo id é atribuido ao elemento refer)
+     * existe no corpo do documento NCL. Caso não exista, uma advertência é adicionada
+     * a lista de advertências.
+     */
 
     private void contextReference() {
         //Search for the interface inside the node
@@ -961,7 +979,15 @@ public class NCLContext<C extends NCLContext, Pt extends NCLPort, Pp extends NCL
         setRefer(findContext(((NCLBody) body).getNodes()));
     }
 
-
+    /**
+     * Dado um conjunto de nós, procura pelo contexto referenciado (cujo id é
+     * atribuido ao elemento refer).
+     * @param nodes
+     *  Conjunto de nós que se deseja pesquisar
+     * @return
+     *  O contexto referenciado pelo atual, caso ele exista. Caso não encontre,
+     * adiciona uma advertencia a lista d asvertencias e retorna null.
+     */
     private C findContext(Iterable<N> nodes) {
         for(N n : nodes){
             if(n instanceof NCLContext){

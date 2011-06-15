@@ -58,8 +58,13 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>media</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define um conteúdo de um documento NCL.<br/>
+ * Este elemento é o elemento que define um conteúdo de um documento NCL. Cada objeto de mídia possui, além de seu identificador, os atributos: <i>src</i>, que define a URI do objeto;
+ * <i>type</i>, que define o tipo do objeto; <i>descriptor</i>, que referencia o descritor que define como a mídia será apresentada, <i>refer</i> referância a um outro nó de mídia,
+ * como forma de reuso do nó; e <i>intance</i>, utilizado quando o atributo refer é definido para especificar propriedades do objeto de mídia atual.
+ * Os elementos filho do elemento <i>media</i> são as suas âncoras de conteúdo (elementos <i>area</i>) e suas propriedades (elementos <i>property</i>).<br/>
  *
+ * @see NCLArea
+ * @see NCLProperty
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
  */
@@ -78,9 +83,9 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     
     /**
      * Construtor do elemento <i>media</i> da <i>Nested Context Language</i> (NCL).
-     * 
+     *
      * @param id
-     *          identificador do elemento media.
+     *          String representando o identificador do elemento media.
      * @throws br.pensario.NCLInvalidIdentifierException
      *          se o identificador da media for inválido.
      */
@@ -105,17 +110,17 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     }
     
     
-    /**
+   
+/**
      * Atribui a URI do conteúdo da mídia.
-     * 
+     *
      * @param src
      *          String contendo a URI do conteúdo da mídia.
      * @throws java.net.URISyntaxException
      *          se a URI não for válida.
      *
      * @see java.net.URI
-     */
-    public void setSrc(String src) throws URISyntaxException {
+     */    public void setSrc(String src) throws URISyntaxException {
         if(src != null)
             this.src = new URI(src).toString();
         
@@ -126,7 +131,7 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     /**
      * Atribui a URI do conteúdo da mídia usando uma URI padrão.
      * Mídias do tipo settings não tem src.
-     * 
+     *
      * @param type
      *          tipo da URI.
      * @param src
@@ -153,7 +158,7 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     /**
      * Atribui a URI do conteúdo da mídia do tipo Time.
      * Nesse caso o conteúdo da mídia será um identificador de tempo no formato UTC.
-     * 
+     *
      * @param time
      *          indicador de tempo no formato UTC.
      * @throws java.lang.IllegalArgumentException
@@ -172,7 +177,7 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     
     /**
      * Retorna o valor da URI do conteúdo da mídia.
-     * 
+     *
      * @return
      *          String contendo a URI do conteúdo da mídia.
      *
@@ -188,7 +193,7 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     /**
      * Determina o tipo da mídia.
      * O tipo da mídia será um dos tipos padronizados na norma.
-     * 
+     *
      * @param type
      *          tipo da mídia.
      */
@@ -199,7 +204,7 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     
     /**
      * Retorna o tipo da mídia.
-     * 
+     *
      * @return
      *          tipo da mídia.
      */
@@ -209,8 +214,8 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     
     
     /**
-     * Determina o descritor da mídia.
-     * 
+     * Determina o descritor associado a mídia.
+     *
      * @param descriptor
      *          elemento representando o descritor da mídia.
      */
@@ -220,8 +225,8 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     
     
     /**
-     * Retorna o descritor da mídia.
-     * 
+     * Retorna o descritor associado a mídia.
+     *
      * @return
      *          elemento representando o descritor da mídia.
      */
@@ -231,10 +236,10 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
 
 
     /**
-     * Atribui uma media para ser reutilizada pela media.
+     * Atribui uma midia ao atributo refer, para ser reutilizada pela media atual.
      *
      * @param refer
-     *          elemento representando a media a ser reutilizado.
+     *          elemento representando a media a ser reutilizada.
      */
     public void setRefer(M refer) {
         this.refer = refer;
@@ -242,10 +247,10 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
 
 
     /**
-     * Retorna a media reutilizada pela media.
+     * Retorna a mídia associada ao atributo refer da mídia atual.
      *
      * @return
-     *          elemento representando a media a ser reutilizado.
+     *          elemento representando a mídia reutilizada.
      */
     public M getRefer() {
         return refer;
@@ -253,7 +258,14 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
 
 
     /**
-     * Determina o tipo de instância de outra media essa media é.
+     * Determina o tipo de instância de outra media que a mídia atual é. Se o
+     * valor de intance for igual a "new", a mídia atual é uma cópia da mídia referenciada,
+     * porém um objeto completamente independente. Se o valor de instance for
+     * "instSame", o objeto atual é exatamente o mesmo que o referenciado,
+     * incorporando todas as propriedades e âncoras de conteúdo presentes no
+     * documento referenciado. Por fim, se o valor de instance for "gradSame",
+     * o objeto atual é o mesmo objeto, mas incorporará as propriedades e âncoras
+     * a medida que elas forem sendo utilizadas no nó referenciado.
      *
      * @param instance
      *          elemento representando o tipo de instancia.
@@ -266,6 +278,7 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     /**
      * Retorna o tipo de instância de outra media essa media é.
      *
+     * @see NCLMedia#setInstance(br.uff.midiacom.ana.NCLValues.NCLInstanceType)
      * @return
      *          elemento representando o tipo de instancia.
      */
@@ -275,8 +288,12 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     
     
     /**
-     * Adiciona uma âncora a mídia.
-     * 
+     * Adiciona uma âncora de conteúdo a mídia. Esta representa um trecho da mídia,
+     * como uma interface que pode participar de relacionamentos.
+     *
+     *
+     * @see NCLArea
+     *
      * @param area
      *          elemento representando a âncora a ser adicionada.
      * @return
@@ -297,7 +314,7 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     
     
     /**
-     * Remove uma âncora da mídia.
+     * Remove uma âncora de conteúdo da mídia.
      *
      * @param id
      *          identificador da âncora a ser removida.
@@ -316,10 +333,10 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     
     
     /**
-     * Remove uma âncora a mídia.
+     * Remove uma âncora da mídia.
      *
      * @param area
-     *          elemento representando a âncora a ser removida.
+     *          Objeto representando a âncora a ser removida.
      * @return
      *          Verdadeiro se a âncora foi removida.
      *
@@ -338,8 +355,8 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     
     
     /**
-     * Verifica se a mídia possui uma âncora.
-     * 
+     * Verifica se a mídia possui uma âncora. Busca a partir do id da ancora.
+     *
      * @param id
      *          identificador da âncora a ser verificada.
      * @return
@@ -355,10 +372,10 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     
     
     /**
-     * Verifica se a mídia possui uma âncora.
-     * 
+     * Verifica se a mídia possui uma âncora. Busca a partir da referência a ancora.
+     *
      * @param area
-     *          elemento representando a âncora a ser verificada.
+     *          Objeto representando a âncora a ser verificada.
      * @return
      *          verdadeiro se a âncora existir.
      */
@@ -369,7 +386,7 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     
     /**
      * Verifica se a mídia possui alguma âncora.
-     * 
+     *
      * @return
      *          verdadeiro se a mídia possuir alguma âncora.
      */
@@ -391,6 +408,8 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
     
     /**
      * Adiciona uma propriedade a mídia.
+     *
+     * @see NCLProperty
      *
      * @param property
      *          elemento representando a propriedade a ser adicionada.
@@ -415,7 +434,7 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
      * Remove uma propriedade da mídia.
      *
      * @param name
-     *          nome da propriedade a ser removida.
+     *          String representando o nome da propriedade a ser removida.
      * @return
      *          Verdadeiro se a propriedade foi removida.
      *
@@ -434,7 +453,7 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
      * Remove uma propriedade da mídia.
      *
      * @param property
-     *          elemento representando a propriedade a ser removida.
+     *          Objeto representando a propriedade a ser removida.
      * @return
      *          Verdadeiro se a propriedade foi removida.
      *
@@ -453,7 +472,7 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
 
 
     /**
-     * Verifica se a mídia possui uma propriedade.
+     * Verifica se a mídia possui uma propriedade. Faz a busca a partir do nome da propriedade.
      *
      * @param name
      *          nome da propriedade a ser verificada.
@@ -470,10 +489,10 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
 
 
     /**
-     * Verifica se a mídia possui uma propriedade.
+     * Verifica se a mídia possui uma propriedade. Busca a partir da referência a propriedade.
      *
      * @param property
-     *          elemento representando a propriedade a ser verificada.
+     *          Objeto representando a propriedade a ser verificada.
      * @return
      *          verdadeiro se a propriedade existir.
      */
@@ -505,7 +524,7 @@ public class NCLMedia<A extends NCLArea, P extends NCLProperty, N extends NCLNod
 
 
     /**
-     * Retorna o tipo da mídia de acordo com seu tipo especificado ou sua URL.
+     * Retorna o tipo da mídia de acordo com seu tipo especificado ou sua URI.
      *
      * @return
      *          elemento representando o tipo da mídia.

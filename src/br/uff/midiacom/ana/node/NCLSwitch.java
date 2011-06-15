@@ -52,8 +52,15 @@ import org.xml.sax.XMLReader;
 
 /**
  * Esta classe define o elemento <i>switch</i> da <i>Nested Context Language</i> (NCL).
- * Este elemento é o elemento que define a apresentação de conteudos alternativos em um documento NCL.<br/>
+ * Este elemento  define a apresentação de conteudos alternativos em um documento NCL.
+ * Um nó switch é uma composição contendo nós alternativos, dentre os quais apenas
+ * um será selecionado. A decisão sobre qual nó será selecionado é dada pela avaliação
+ * de regras de mapeamento, definidas através de elementos <i>bindRule</i>. Ainda
+ * podemos definir um nó a ser selecionado por default através do elemento filho
+ * <i>defaultComponent</i>, no caso de nenhuma regra ser satisfeita.<br/>
  *
+ * @see NCLBindRule
+ * @see NCLRule
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
  */
@@ -100,10 +107,10 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
 
 
     /**
-     * Atribui um switch para ser reutilizado pelo switch.
+     * Atribui um nó swicth ao atributo refer, para ser reutilizado pelo nó switch atual.
      *
      * @param refer
-     *          elemento representando o switch a ser reutilizado.
+     *          Objeto representando o switch a ser reutilizado.
      */
     public void setRefer(S refer) {
         this.refer = refer;
@@ -111,7 +118,7 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
 
 
     /**
-     * Retorna o switch reutilizado pelo switch.
+     * Retorna o elemento swicth associado ao atributo refer do switch atual.
      *
      * @return
      *          elemento representando o switch a ser reutilizado.
@@ -122,7 +129,9 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
 
 
     /**
-     * Adiciona uma porta ao switch.
+     * Adiciona uma porta ao switch.  Este elemento é obrigatório quando se
+     * deseja mapear os nós de conteúdo, não como um todo, mas através as suas
+     * interfaces.
      *
      * @param port
      *          elemento representando a porta a ser adicionada.
@@ -144,10 +153,10 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
 
 
     /**
-     * Remove uma porta do switch.
+     * Remove uma porta do switch, a partir do seu identificador.
      *
      * @param id
-     *          identificador da porta a ser removida.
+     *          string representando o id da porta a ser removida.
      * @return
      *          Verdadeiro se a porta foi removida.
      *
@@ -163,10 +172,10 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
 
 
     /**
-     * Remove uma porta do switch.
+     * Remove uma porta do switch, a partir de sua referencia.
      *
      * @param port
-     *          elemento representando a porta a ser removida.
+     *          objeto representando a porta a ser removida.
      * @return
      *          Verdadeiro se a porta foi removida.
      *
@@ -183,9 +192,9 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
         return false;
     }
 
-
-    /**
-     * Verifica se o switch possui uma porta.
+/**
+     * Verifica se o switch possui uma porta. Executa a busca a partir do
+ * identificador da porta desejada.
      *
      * @param id
      *          identificador da porta a ser verificada.
@@ -202,10 +211,11 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
 
 
     /**
-     * Verifica se o switch possui uma porta.
+     * Verifica se o switch possui uma porta. Executa a busca a partir de uma
+     * referência a porta desejada.
      *
      * @param port
-     *          elemento representando a porta a ser verificada.
+     *          objeto representando a porta a ser verificada.
      * @return
      *          verdadeiro se a porta existir.
      */
@@ -259,12 +269,12 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
 
 
     /**
-     * Adiciona um bind ao switch.
+     * Adiciona um bindRule ao switch.
      *
      * @param bind
-     *          elemento representando o bind a ser adicionado.
+     *          objeto representando o bindRule a ser adicionado.
      *
-     * @see ArrayList#add
+     * @see TreeSet#add
      */
     public boolean addBind(B bind) {
         if(bind != null && binds.add(bind)){
@@ -278,12 +288,12 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
 
 
     /**
-     * Remove um bind do switch.
+     * Remove um bindRule do switch.
      *
      * @param bind
      *          elemento representando o bind a ser removido.
      *
-     * @see ArrayList#remove
+     * @see TreeSet#remove
      */
     public boolean removeBind(B bind) {
         if(binds.remove(bind)){
@@ -298,10 +308,10 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
 
 
     /**
-     * Verifica se o switch contém um bind.
+     * Verifica se o switch contém um bindRule, a partir de sua referência.
      *
      * @param bind
-     *          elemento representando o bind a ser verificado.
+     *          objeto representando o bind a ser verificado.
      */
     public boolean hasBind(B bind) {
         return binds.contains(bind);
@@ -331,10 +341,11 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
 
 
     /**
-     * Adiciona um nó ao switch.
+     * Adiciona um nó ao switch. Um switch pde conter qualquer tipo de nó: de
+     * mídia, de contexto e outos switches.
      *
      * @param node
-     *          elemento representando o nó a ser adicionado.
+     *          objeto representando o nó a ser adicionado.
      * @return
      *          Verdadeiro se o nó foi adicionado.
      *
@@ -353,7 +364,7 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
 
 
     /**
-     * Remove um nó do switch.
+     * Remove um nó do switch a partir de seu identificador.
      *
      * @param id
      *          identificador do nó a ser removido.
@@ -372,7 +383,7 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
 
 
     /**
-     * Remove um nó do switch.
+     * Remove um nó do switch a partir de sua referência.
      *
      * @param node
      *          elemento representando um nó a ser removido.
@@ -394,7 +405,7 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
 
 
     /**
-     * Verifica se o switch possui um nó.
+     * Verifica se o switch possui um nó. executa a busca atravś do id do nó desejado.
      *
      * @param id
      *          identificador do nó a ser verificado.
@@ -411,7 +422,7 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
 
 
     /**
-     * Verifica se o switch possui um nó.
+     * Verifica se o switch possui um nó. executa a busca a partir de uma referância ao nó desejado.
      *
      * @param node
      *          elemento representando o nó a ser verificado.
@@ -432,7 +443,6 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
     public boolean hasNode() {
         return (!nodes.isEmpty());
     }
-
 
     /**
      * Retorna os nós do switch.
@@ -491,6 +501,14 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
         return content;
     }
 
+    /**
+     * Compara o switch atual a um outro no, atraves do identificador.
+     * @param other
+     *  Nó ao qual se deseja comparar o atual.
+     * @return
+     *      Retorna 0, caso os nos sejam iguais.
+     *      Retorna diferente de zero, caso sejam diferentes.
+     */
     public int compareTo(N other) {
         return getId().compareTo(other.getId());
     }
@@ -641,7 +659,11 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
         }
     }
 
-
+    /**
+     * Verifica se o no associado ao atributo defaultComponent do switch existe
+     * dentro dele. Caso não exista, adiciona uma advertencia a lista de
+     * advertencias.
+     */
     private void defaultComponentReference() {
         //Search for a component node in its parent
         for(N node : nodes){
@@ -654,7 +676,11 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
         addWarning("Could not find node in switch with id: " + getDefaultComponent().getId());
     }
 
-
+    /**
+     * Verifica se o switch referenciado pelo switch atual (atributo refer) existe
+     * no corpo do documento. Caso não exista, adiciona uma advertencia a lista
+     * de advertencias.
+     */
     private void switchReference() {
         //Search for the interface inside the node
         NCLElement body = getParent();
@@ -670,7 +696,15 @@ public class NCLSwitch<N extends NCLNode, S extends NCLSwitch, P extends NCLSwit
         setRefer(findSwitch(((NCLBody) body).getNodes()));
     }
 
-
+    /**
+     * Dado um conjunto de nos, verifica se o no associado ao atributo refer existe.
+     * Retorna o no referenciado, caso exista. Caso contrario, adiciona uma advertencia
+     * a lista de advertencias e retorna null.
+     * @param nodes
+     *  conjunto de nós que se deseja verificar.
+     * @return
+     *   O nó referenciado, caso exista.
+     */
     private S findSwitch(Iterable<N> nodes) {
         for(N n : nodes){
             if(n instanceof NCLContext){
