@@ -50,7 +50,18 @@ import org.xml.sax.XMLReader;
 
 
 /**
- * Esta classe define uma transição da <i>Nested Context Language</i> (NCL).<br/>
+ * Esta classe define uma transição da <i>Nested Context Language</i> (NCL).
+ * As transições especificam efeitos de transição que os descritores podem utilizar
+ * na exibição de objetos de mídia em uma aplicação NCL.As transições são definidas
+ * no cabeçalho do documento, em uma base de transições definida pelo elemento
+ * <i>transitionBase</i>.
+ * As transições são associadas as mídias através dos atributos de descritor
+ * <i>transIn</i> (especifica uma transição de entrada) e <i>transOut</i> (especifica
+ * uma transição de saída)
+ *
+ * <br/>
+ *
+ * @see br.uff.midiacom.ana.transition.NCLTransitionBase
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
@@ -100,7 +111,9 @@ public class NCLTransition<T extends NCLTransition> extends NCLIdentifiableEleme
 
 
     /**
-     * Atribui um tipo a transição.
+     * Define o tipo da transição.
+     *
+     * @see br.uff.midiacom.ana.NCLValues.NCLTransitionType
      *
      * @param type
      *          elemento representando o tipo da transição.
@@ -113,6 +126,8 @@ public class NCLTransition<T extends NCLTransition> extends NCLIdentifiableEleme
     /**
      * Retorna o tipo da transição.
      *
+     * @see br.uff.midiacom.ana.NCLValues.NCLTransitionType
+     *
      * @return
      *          elemento representando o tipo da transição.
      */
@@ -124,6 +139,8 @@ public class NCLTransition<T extends NCLTransition> extends NCLIdentifiableEleme
     /**
      * Atribui um subtipo a transição.
      *
+     * @see br.uff.midiacom.ana.NCLValues.NCLTransitionSubtype
+     *
      * @param subtype
      *          elemento representando o subtipo da transição.
      */
@@ -134,6 +151,8 @@ public class NCLTransition<T extends NCLTransition> extends NCLIdentifiableEleme
 
     /**
      * Retorna o subtipo da transição.
+     *
+     * @see br.uff.midiacom.ana.NCLValues.NCLTransitionSubtype
      *
      * @return
      *          elemento representando o subtipo da transição.
@@ -166,21 +185,25 @@ public class NCLTransition<T extends NCLTransition> extends NCLIdentifiableEleme
 
 
     /**
-     * Atribui um delay de progresso inicial a transição.
+     * Especifica o quanto de progresso para a transição deve ser assumido ao iniciar
+     * e execução. O valor deste atributo deve estar contido no intervalo [0.0,1.0].
      *
      * @param startProgress
-     *          fracionário representando o delay inicial.
-     */
+     *          real representando a porcentagem da mídia que estará visível no
+     * inicio da transição.
+    */
+     
     public void setStartProgress(Double startProgress) {
         this.startProgress = startProgress;
     }
 
 
     /**
-     * Retorna o delay de progresso inicial da transição.
+     * Retorna a condição inicial do processo de transição da mídia.
      *
      * @return
-     *          fracionário representando o delay inicial.
+     *          real representando a porcentagem da mídia que estará visível no
+     * inicio da transição.
      */
     public Double getStartProgress() {
         return startProgress;
@@ -188,10 +211,13 @@ public class NCLTransition<T extends NCLTransition> extends NCLIdentifiableEleme
 
 
     /**
-     * Atribui um delay de progresso final a transição.
+     * Especifica até quanto de progreso para a transição deve ser realizado até
+     * terminar a execução. Ao atingir este valor (pertencente ao intervalo
+     * [0.0,1.0]), toda a mídia é revelada, encerrando o processo de transição.
      *
-     * @param startProgress
-     *          fracionário representando o delay final.
+     * @param endProgress
+     *          real representando a porcentagem da mídia que deverá ser exibida
+     * para que o processo de transição termine.
      */
     public void setEndProgress(Double endProgress) {
         this.endProgress = endProgress;
@@ -199,10 +225,12 @@ public class NCLTransition<T extends NCLTransition> extends NCLIdentifiableEleme
 
 
     /**
-     * Retorna o delay de progresso final da transição.
+     * Retorna a porcentagem de exibição da mídia que representa a condição de
+     * parada da transição.
      *
      * @return
-     *          fracionário representando o delay final.
+     *          real representando a porcentagem da mídia que deverá ser exibida
+     * para que o processo de transição termine.
      */
     public Double getEndProgress() {
         return endProgress;
@@ -210,7 +238,9 @@ public class NCLTransition<T extends NCLTransition> extends NCLIdentifiableEleme
 
 
     /**
-     * Atribui uma direção a transição.
+     * Especifica a direção em que ocorrerá a transição.
+     *
+     * @see br.uff.midiacom.ana.NCLValues.NCLTransitionDirection
      *
      * @param direction
      *          elemento representando a direção.
@@ -221,7 +251,9 @@ public class NCLTransition<T extends NCLTransition> extends NCLIdentifiableEleme
 
 
     /**
-     * Retorna a direção da transição.
+     * Retorna a direção em que ocorrerá a transição.
+     *
+     * @see br.uff.midiacom.ana.NCLValues.NCLTransitionDirection
      *
      * @return
      *          elemento representando a direção.
@@ -232,7 +264,9 @@ public class NCLTransition<T extends NCLTransition> extends NCLIdentifiableEleme
 
 
     /**
-     * Atribui uma cor para as transições de fade com cor.
+     * Especifica a cor utilizada para efeitos de transição do tipo fade.
+     *
+     * @see br.uff.midiacom.ana.NCLValues.NCLColor
      *
      * @param fadeColor
      *          cor associada a transição de fade.
@@ -243,7 +277,7 @@ public class NCLTransition<T extends NCLTransition> extends NCLIdentifiableEleme
 
 
     /**
-     * Retorna a cor da transição de fade.
+     * Retorna a cor utilizada para efeitos de transição do tipo fade.
      *
      * @return
      *          cor associada a transição de fade.
@@ -298,7 +332,7 @@ public class NCLTransition<T extends NCLTransition> extends NCLIdentifiableEleme
 
 
     /**
-     * Determina a largura da borda da transição.
+     * Determina a largura da moldura gerada ao longo da borda da transição.
      *
      * @param borderWidth
      *          inteiro representando a largura da borda.
@@ -309,7 +343,7 @@ public class NCLTransition<T extends NCLTransition> extends NCLIdentifiableEleme
 
 
     /**
-     * Retorna a largura da borda da transição.
+     * Retorna a largura da moldura gerada ao longo da borda de transição.
      *
      * @return
      *          inteiro representando a largura da borda.
@@ -319,11 +353,14 @@ public class NCLTransition<T extends NCLTransition> extends NCLIdentifiableEleme
     }
 
 
-    /**
-     * Determina a cor da borda da transição.
+   
+     /**
+     * Determina a cor da moldura gerada ao longo da borda de transição.
+     *
+     * @see NCLColor
      *
      * @param borderColor
-     *          cor da borda.
+     *          cor da moldura
      */
     public void setBorderColor(NCLColor borderColor) {
         this.borderColor = borderColor;
@@ -331,10 +368,10 @@ public class NCLTransition<T extends NCLTransition> extends NCLIdentifiableEleme
 
 
     /**
-     * Retorna a cor da borda da transição.
+     * Retorna a cor da moldura gerada ao longo da borda de transição.
      *
      * @return
-     *          cor da borda.
+     *          cor da moldura.
      */
     public NCLColor getBorderColor() {
         return borderColor;
@@ -384,7 +421,18 @@ public class NCLTransition<T extends NCLTransition> extends NCLIdentifiableEleme
         return content;
     }
 
-
+    /**
+     * Compara o elemento transition atual com um outro qualquer, através do
+     * identificador.
+     *
+     * @param other
+     *      transição a qual se deseja comparar a atual.
+     *
+     * @return
+     *      Retorna 0, caso as transições sejam iguais.
+     *      Retorna um inteiro deiferente de zero, caso sejam diferentes.
+     *
+     */
     public int compareTo(T other) {
         return getId().compareTo(other.getId());
     }

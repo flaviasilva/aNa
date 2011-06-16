@@ -49,7 +49,16 @@ import org.xml.sax.XMLReader;
 
 
 /**
- * Esta classe define uma base de transições da <i>Nested Context Language</i> (NCL).<br/>
+ * Esta classe define uma base de transições da <i>Nested Context Language</i> (NCL).
+ * A base de transições, elemento <i>transitionBase</i> é definido no cabeçalho
+ * do documento e contém as transições que seram utilizadas nas exibições
+ * das mídias. Seus elementos filho são: transições (elementos <i>transition</i>);
+ * e importadores de base (elementos <i>importBase</i>), que permitem reutilizar
+ * bases definidas em otros documentos.
+ *
+ * @see br.uff.midiacom.ana.transition.NCLTransition
+ * @see br.uff.midiacom.ana.reuse.NCLImport
+ * <br/>
  *
  * @see <a href="http://www.dtv.org.br/download/pt-br/ABNTNBR15606-2_2007Vc3_2008.pdf">
  *          ABNT NBR 15606-2:2007</a>
